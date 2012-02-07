@@ -6,14 +6,212 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		3B3256C014DF1E3B00B659BA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256BF14DF1E3B00B659BA /* UIKit.framework */; };
+		3B3256C214DF1E3B00B659BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256C114DF1E3B00B659BA /* Foundation.framework */; };
+		3B3256C414DF1E3B00B659BA /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256C314DF1E3B00B659BA /* CoreGraphics.framework */; };
+		3B3256D814DF1E3B00B659BA /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256D714DF1E3B00B659BA /* SenTestingKit.framework */; };
+		3B3256D914DF1E3B00B659BA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256BF14DF1E3B00B659BA /* UIKit.framework */; };
+		3B3256DA14DF1E3B00B659BA /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3B3256C114DF1E3B00B659BA /* Foundation.framework */; };
+		3B3256E214DF1E3B00B659BA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3B3256E014DF1E3B00B659BA /* InfoPlist.strings */; };
+		3B3256E514DF1E3B00B659BA /* kvdbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B3256E414DF1E3B00B659BA /* kvdbTests.m */; };
+		3B3256F714DF1FD000B659BA /* KVDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 3B3256F614DF1FD000B659BA /* KVDB.m */; };
+		3BDFF26D14E04FBB008675E4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF26714E04FBB008675E4 /* AppDelegate.m */; };
+		3BDFF26E14E04FBB008675E4 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3BDFF26814E04FBB008675E4 /* InfoPlist.strings */; };
+		3BDFF27014E04FBB008675E4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF26C14E04FBB008675E4 /* main.m */; };
+		3BDFF27414E04FDE008675E4 /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF27314E04FDE008675E4 /* KVDBFunctions.m */; };
+		3BDFF2D214E06265008675E4 /* FilesTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF2D014E06262008675E4 /* FilesTestCase.m */; };
+		3BDFF32B14E06ED2008675E4 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 3BDFF32A14E06ED2008675E4 /* libsqlite3.dylib */; };
+		3BDFF32E14E0744D008675E4 /* DatabaseTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF32D14E0744D008675E4 /* DatabaseTestCase.m */; };
+		3BDFF33114E08930008675E4 /* SerializationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDFF33014E08930008675E4 /* SerializationTestCase.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3B3256DB14DF1E3B00B659BA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B3256B014DF1E1E00B659BA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3B3256BA14DF1E3B00B659BA;
+			remoteInfo = kvdb;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3B3256BB14DF1E3B00B659BA /* kvdb.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = kvdb.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B3256BF14DF1E3B00B659BA /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
+		3B3256C114DF1E3B00B659BA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3B3256C314DF1E3B00B659BA /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
+		3B3256D614DF1E3B00B659BA /* kvdbTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kvdbTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B3256D714DF1E3B00B659BA /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		3B3256DF14DF1E3B00B659BA /* kvdbTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kvdbTests-Info.plist"; sourceTree = "<group>"; };
+		3B3256E114DF1E3B00B659BA /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3B3256E314DF1E3B00B659BA /* kvdbTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kvdbTests.h; sourceTree = "<group>"; };
+		3B3256E414DF1E3B00B659BA /* kvdbTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
+		3B3256F514DF1FD000B659BA /* KVDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KVDB.h; sourceTree = "<group>"; };
+		3B3256F614DF1FD000B659BA /* KVDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVDB.m; sourceTree = "<group>"; };
+		3BDFF26614E04FBB008675E4 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		3BDFF26714E04FBB008675E4 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		3BDFF26914E04FBB008675E4 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		3BDFF26A14E04FBB008675E4 /* kvdb-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "kvdb-Info.plist"; sourceTree = "<group>"; };
+		3BDFF26B14E04FBB008675E4 /* kvdb-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "kvdb-Prefix.pch"; sourceTree = "<group>"; };
+		3BDFF26C14E04FBB008675E4 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		3BDFF27214E04FDE008675E4 /* KVDBFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KVDBFunctions.h; sourceTree = "<group>"; };
+		3BDFF27314E04FDE008675E4 /* KVDBFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVDBFunctions.m; sourceTree = "<group>"; };
+		3BDFF2CF14E06262008675E4 /* FilesTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesTestCase.h; sourceTree = "<group>"; };
+		3BDFF2D014E06262008675E4 /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
+		3BDFF32A14E06ED2008675E4 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS5.0.sdk/usr/lib/libsqlite3.dylib; sourceTree = DEVELOPER_DIR; };
+		3BDFF32C14E0744D008675E4 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
+		3BDFF32D14E0744D008675E4 /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
+		3BDFF32F14E08930008675E4 /* SerializationTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializationTestCase.h; sourceTree = "<group>"; };
+		3BDFF33014E08930008675E4 /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B3256B814DF1E3B00B659BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3256C014DF1E3B00B659BA /* UIKit.framework in Frameworks */,
+				3B3256C214DF1E3B00B659BA /* Foundation.framework in Frameworks */,
+				3B3256C414DF1E3B00B659BA /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B3256D214DF1E3B00B659BA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BDFF32B14E06ED2008675E4 /* libsqlite3.dylib in Frameworks */,
+				3B3256D814DF1E3B00B659BA /* SenTestingKit.framework in Frameworks */,
+				3B3256D914DF1E3B00B659BA /* UIKit.framework in Frameworks */,
+				3B3256DA14DF1E3B00B659BA /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
 		3B3256AE14DF1E1E00B659BA = {
 			isa = PBXGroup;
 			children = (
+				3B3256F514DF1FD000B659BA /* KVDB.h */,
+				3B3256F614DF1FD000B659BA /* KVDB.m */,
+				3BDFF27114E04FC4008675E4 /* KVDB */,
+				3BDFF26514E04FBB008675E4 /* build */,
+				3B3256DD14DF1E3B00B659BA /* kvdbTests */,
+				3B3256BE14DF1E3B00B659BA /* Frameworks */,
+				3B3256BC14DF1E3B00B659BA /* Products */,
 			);
 			sourceTree = "<group>";
 		};
+		3B3256BC14DF1E3B00B659BA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B3256BB14DF1E3B00B659BA /* kvdb.app */,
+				3B3256D614DF1E3B00B659BA /* kvdbTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3B3256BE14DF1E3B00B659BA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3BDFF32A14E06ED2008675E4 /* libsqlite3.dylib */,
+				3B3256BF14DF1E3B00B659BA /* UIKit.framework */,
+				3B3256C114DF1E3B00B659BA /* Foundation.framework */,
+				3B3256C314DF1E3B00B659BA /* CoreGraphics.framework */,
+				3B3256D714DF1E3B00B659BA /* SenTestingKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3B3256DD14DF1E3B00B659BA /* kvdbTests */ = {
+			isa = PBXGroup;
+			children = (
+				3B3256E314DF1E3B00B659BA /* kvdbTests.h */,
+				3B3256E414DF1E3B00B659BA /* kvdbTests.m */,
+				3B3256DE14DF1E3B00B659BA /* Supporting Files */,
+				3BDFF2CF14E06262008675E4 /* FilesTestCase.h */,
+				3BDFF2D014E06262008675E4 /* FilesTestCase.m */,
+				3BDFF32C14E0744D008675E4 /* DatabaseTestCase.h */,
+				3BDFF32D14E0744D008675E4 /* DatabaseTestCase.m */,
+				3BDFF32F14E08930008675E4 /* SerializationTestCase.h */,
+				3BDFF33014E08930008675E4 /* SerializationTestCase.m */,
+			);
+			path = kvdbTests;
+			sourceTree = "<group>";
+		};
+		3B3256DE14DF1E3B00B659BA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				3B3256DF14DF1E3B00B659BA /* kvdbTests-Info.plist */,
+				3B3256E014DF1E3B00B659BA /* InfoPlist.strings */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		3BDFF26514E04FBB008675E4 /* build */ = {
+			isa = PBXGroup;
+			children = (
+				3BDFF26614E04FBB008675E4 /* AppDelegate.h */,
+				3BDFF26714E04FBB008675E4 /* AppDelegate.m */,
+				3BDFF26814E04FBB008675E4 /* InfoPlist.strings */,
+				3BDFF26A14E04FBB008675E4 /* kvdb-Info.plist */,
+				3BDFF26B14E04FBB008675E4 /* kvdb-Prefix.pch */,
+				3BDFF26C14E04FBB008675E4 /* main.m */,
+			);
+			path = build;
+			sourceTree = "<group>";
+		};
+		3BDFF27114E04FC4008675E4 /* KVDB */ = {
+			isa = PBXGroup;
+			children = (
+				3BDFF27214E04FDE008675E4 /* KVDBFunctions.h */,
+				3BDFF27314E04FDE008675E4 /* KVDBFunctions.m */,
+			);
+			path = KVDB;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3B3256BA14DF1E3B00B659BA /* kvdb */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B3256E614DF1E3B00B659BA /* Build configuration list for PBXNativeTarget "kvdb" */;
+			buildPhases = (
+				3B3256B714DF1E3B00B659BA /* Sources */,
+				3B3256B814DF1E3B00B659BA /* Frameworks */,
+				3B3256B914DF1E3B00B659BA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = kvdb;
+			productName = kvdb;
+			productReference = 3B3256BB14DF1E3B00B659BA /* kvdb.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3B3256D514DF1E3B00B659BA /* kvdbTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B3256E914DF1E3B00B659BA /* Build configuration list for PBXNativeTarget "kvdbTests" */;
+			buildPhases = (
+				3B3256D114DF1E3B00B659BA /* Sources */,
+				3B3256D214DF1E3B00B659BA /* Frameworks */,
+				3B3256D314DF1E3B00B659BA /* Resources */,
+				3B3256D414DF1E3B00B659BA /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B3256DC14DF1E3B00B659BA /* PBXTargetDependency */,
+			);
+			name = kvdbTests;
+			productName = kvdbTests;
+			productReference = 3B3256D614DF1E3B00B659BA /* kvdbTests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
+/* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
 		3B3256B014DF1E1E00B659BA /* Project object */ = {
@@ -29,23 +227,242 @@
 				en,
 			);
 			mainGroup = 3B3256AE14DF1E1E00B659BA;
+			productRefGroup = 3B3256BC14DF1E3B00B659BA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				3B3256BA14DF1E3B00B659BA /* kvdb */,
+				3B3256D514DF1E3B00B659BA /* kvdbTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3B3256B914DF1E3B00B659BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BDFF26E14E04FBB008675E4 /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B3256D314DF1E3B00B659BA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3256E214DF1E3B00B659BA /* InfoPlist.strings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3B3256D414DF1E3B00B659BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B3256B714DF1E3B00B659BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3256F714DF1FD000B659BA /* KVDB.m in Sources */,
+				3BDFF26D14E04FBB008675E4 /* AppDelegate.m in Sources */,
+				3BDFF27014E04FBB008675E4 /* main.m in Sources */,
+				3BDFF27414E04FDE008675E4 /* KVDBFunctions.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B3256D114DF1E3B00B659BA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3B3256E514DF1E3B00B659BA /* kvdbTests.m in Sources */,
+				3BDFF2D214E06265008675E4 /* FilesTestCase.m in Sources */,
+				3BDFF32E14E0744D008675E4 /* DatabaseTestCase.m in Sources */,
+				3BDFF33114E08930008675E4 /* SerializationTestCase.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3B3256DC14DF1E3B00B659BA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3B3256BA14DF1E3B00B659BA /* kvdb */;
+			targetProxy = 3B3256DB14DF1E3B00B659BA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		3B3256E014DF1E3B00B659BA /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3B3256E114DF1E3B00B659BA /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		3BDFF26814E04FBB008675E4 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3BDFF26914E04FBB008675E4 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		3B3256B514DF1E1E00B659BA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-lsqlite3",
+				);
 			};
 			name = Debug;
 		};
 		3B3256B614DF1E1E00B659BA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				OTHER_LDFLAGS = (
+					"-lsqlite3",
+				);
+			};
+			name = Release;
+		};
+		3B3256E714DF1E3B00B659BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "build/kvdb-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "build/kvdb-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		3B3256E814DF1E3B00B659BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(DEVELOPER_FRAMEWORKS_DIR)\"",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "build/kvdb-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "build/kvdb-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		3B3256EA14DF1E3B00B659BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kvdb.app/kvdb";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "build/kvdb-Prefix.pch";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "kvdbTests/kvdbTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		3B3256EB14DF1E3B00B659BA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kvdb.app/kvdb";
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(DEVELOPER_LIBRARY_DIR)/Frameworks",
+				);
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "build/kvdb-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "kvdbTests/kvdbTests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUNDLE_LOADER)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = octest;
 			};
 			name = Release;
 		};
@@ -57,6 +474,24 @@
 			buildConfigurations = (
 				3B3256B514DF1E1E00B659BA /* Debug */,
 				3B3256B614DF1E1E00B659BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B3256E614DF1E3B00B659BA /* Build configuration list for PBXNativeTarget "kvdb" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B3256E714DF1E3B00B659BA /* Debug */,
+				3B3256E814DF1E3B00B659BA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B3256E914DF1E3B00B659BA /* Build configuration list for PBXNativeTarget "kvdbTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B3256EA14DF1E3B00B659BA /* Debug */,
+				3B3256EB14DF1E3B00B659BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
