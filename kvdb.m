@@ -129,6 +129,17 @@ static KVDB *kvdbInstance = NULL;
     [self closeDatabase:&DB];
 }
 
+#pragma mark Compatibilty
+-(void)setObject:(id)object forKey:(NSString *)key {
+    [self setValue:object forKey:key];
+}
+-(void)removeObjectForKey:(NSString *)key {
+    [self removeValueForKey:key];
+}
+-(id)objectForKey:(NSString *)key {
+    return [self valueForKey:key];
+}
+
 -(NSArray *)allObjects {
     id value = nil;
     
@@ -370,10 +381,5 @@ int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column) {
     KVDictBlock objcBlk = resultBlock;
     objcBlk(row);
     
-    return 0;
-}
-
-
-int Callback(void *pArg, int argc, char **argv, char **columnNames){
     return 0;
 }

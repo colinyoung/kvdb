@@ -18,10 +18,14 @@
 -(void)removeValueForKey:(NSString *)key;
 -(id)valueForKey:(NSString *)key;
 
+/* Compatibilty with other frameworks */
+-(void)setObject:(id)object forKey:(NSString *)key;
+-(void)removeObjectForKey:(NSString *)key;
+-(id)objectForKey:(NSString *)key;
+
 -(NSArray *)allObjects;
 -(NSUInteger)count;
 
 @end
 
 int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column);
-int Callback(void *pArg, int argc, char **argv, char **columnNames);
