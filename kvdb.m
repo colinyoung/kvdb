@@ -101,8 +101,8 @@ static KVDB *kvdbInstance = NULL;
               statement:[self _upsertQueryWithKey:key]
                    data:[self archiveObject:object]
                  result:^(BOOL success, NSDictionary *result) {
-         NSLog(@"%@", result);
-     }];
+        // Null implementation, this could get slow.
+    }];
     
     [self closeDatabase:&DB];
 }
@@ -268,7 +268,6 @@ static KVDB *kvdbInstance = NULL;
     [self queryDatabase:db 
               statement:@"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
                  result:^(NSDictionary *result) {
-                     NSLog(@"Tables found: %@", result);
                      if (![[result objectForKey:@"name"] isEqualToString:kKVDBTableName])
                          @throw [NSException exceptionWithName:@"SQLITEError"
                                                         reason:[NSString stringWithFormat:@"There should have been a table called %@.", kKVDBTableName]
