@@ -15,6 +15,7 @@
 -(void)dropDatabase;
 
 -(void)setValue:(id)object forKey:(NSString *)key;
+-(void)removeValueForKey:(NSString *)key;
 -(id)valueForKey:(NSString *)key;
 
 -(NSArray *)allObjects;

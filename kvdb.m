@@ -18,6 +18,7 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 -(NSString *)_upsertQueryWithKey:(NSString *)key;
 -(NSString *)_selectQueryForKey:(NSString *)key;
+-(NSString *)_deleteQueryForKey:(NSString *)key;
 -(void)_writeObject:(id)objC toBlob:(sqlite3_blob**)blob;
 -(NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob;
 
@@ -118,6 +119,14 @@ static KVDB *kvdbInstance = NULL;
     [self closeDatabase:&DB];
     
     return value;
+}
+
+-(void)removeValueForKey:(NSString *)key {
+    [self openDatabase:&DB];
+    
+    [self queryDatabase:&DB statement:[self _deleteQueryForKey:key]];
+    
+    [self closeDatabase:&DB];
 }
 
 -(NSArray *)allObjects {
@@ -273,6 +282,11 @@ static KVDB *kvdbInstance = NULL;
 -(NSString *)_selectQueryForKey:(NSString *)key {
     return [NSString stringWithFormat:@"SELECT key, value FROM %@ WHERE key='%@'", kKVDBTableName, key];
 }
+
+-(NSString *)_deleteQueryForKey:(NSString *)key {
+    return [NSString stringWithFormat:@"DELETE FROM %@ WHERE key='%@'", kKVDBTableName, key];
+}
+
 
 /* Call this function with a sqlite3_blob* initialized to NULL. */
 -(void)_writeObject:(id)objC toBlob:(sqlite3_blob**)blob {

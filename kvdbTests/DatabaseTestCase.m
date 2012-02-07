@@ -15,4 +15,26 @@
 
 // All code under test is in the iOS Application
 
+- (void)setUp {
+    [super setUp];
+    [[KVDB sharedDB] dropDatabase];
+    [[KVDB sharedDB] createDatabase];
+}
+
+- (void)testSerialization
+{
+    NSString *testString = @"Test string is awesome.";
+    NSString *testKey = @"test_str_key";
+    [[KVDB sharedDB] setValue:testString forKey:testKey];
+    
+    id obj = [[KVDB sharedDB] valueForKey:testKey];
+    STAssertEqualObjects(obj, testString, @"Serialized and deserialized objects are equal.");
+    
+    [[KVDB sharedDB] removeValueForKey:testKey];
+    
+    obj = [[KVDB sharedDB] valueForKey:testKey];
+    
+    STAssertNil(obj, @"Key is removed.");
+}
+
 @end
