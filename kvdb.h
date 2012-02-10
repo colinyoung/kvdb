@@ -3,7 +3,6 @@
 
 @interface KVDB : NSObject {
     NSString *_file;
-    sqlite3 *DB;
 }
 @property (nonatomic, retain) NSString *file;
 
