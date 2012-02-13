@@ -214,11 +214,14 @@ static KVDB *kvdbInstance = NULL;
         
         NSString *key = [NSString stringWithCString:keyText encoding:NSUTF8StringEncoding];
         NSData *blob = [NSData dataWithBytes:sqlite3_column_blob(stmt, 1) length:sqlite3_column_bytes(stmt, 1)];
-        id object = [self unarchiveData:blob];
-        [array addObject:[NSDictionary dictionaryWithObjectsAndKeys:
-                          key, @"key",
-                          object, @"value"
-                          , nil]];
+        NSMutableDictionary *rowDict = [NSMutableDictionary dictionaryWithObject:key forKey:@"key"];
+                          
+        if ([blob length]) {
+            id value = [self unarchiveData:blob];
+            [rowDict setObject:value forKey:@"value"];
+        }
+        
+        [array addObject:rowDict];
     }
     
     sqlite3_finalize(stmt);
