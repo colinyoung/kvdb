@@ -6,6 +6,8 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 #define kKVDBTableName @"kvdb"
 
+static NSString *_schema = @"CREATE TABLE kvdb (key TEXT PRIMARY KEY, value BLOB, _index TEXT)";
+
 @interface KVDB (Private)
 
 -(void)createDBFile;
@@ -15,9 +17,14 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 -(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
 -(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
 -(NSArray *)tablesInDatabase:(sqlite3 *)db;
+-(void)_ensureLatestTableStructure:(sqlite3*)db;
 
--(NSString *)_upsertQueryWithKey:(NSString *)key;
+-(id)_getColumn:(NSString *)colName forKey:(NSString *)key;
+-(NSString *)_upsertQueryWithKey:(NSString *)key index:(NSString *)index;
 -(NSString *)_selectQueryForKey:(NSString *)key;
+-(NSString *)_selectQueryForKey:(NSString *)key columns:(NSString *)columns;
+-(NSString *)_selectOneQueryForIndex:(NSString *)index;
+-(NSString *)_selectQueryForIndex:(NSString *)index;
 -(NSString *)_deleteQueryForKey:(NSString *)key;
 -(void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob;
 -(NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob;
@@ -76,7 +83,7 @@ static KVDB *kvdbInstance = NULL;
 -(void)createDatabase {
     
     sqlite3* db = [self openDatabase];
-    [self queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB)", kKVDBTableName]];
+    [self queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB, _index TEXT)", kKVDBTableName]];
     
     // Verify
     [self tablesInDatabase:db];
@@ -94,28 +101,57 @@ static KVDB *kvdbInstance = NULL;
 -(void)setValue:(id)object forKey:(NSString *)key {
     sqlite3* DB = [self openDatabase];
     
+    NSString *index = ([object respondsToSelector:@selector(index)]) ?
+        [object performSelector:@selector(index)] : @"";
+    
     [self queryDatabase:DB
-              statement:[self _upsertQueryWithKey:key]
+              statement:[self _upsertQueryWithKey:key index:index]
                    data:[self archiveObject:object]
                  result:^(BOOL success, NSDictionary *result) {
-        // Null implementation, this could get slow.
+        // Null implementation, 
     }];
     
     [self closeDatabase:DB];
 }
 
 -(id)valueForKey:(NSString *)key {
+    return [self _getColumn:@"value" forKey:key];
+}
+
+-(id)indexForKey:(NSString *)key {
+    return [self _getColumn:@"_index" forKey:key];
+}
+
+-(id)firstObjectMatchingIndex:(NSString*)index {
+    
     NSDictionary* value = nil;
     
     sqlite3* DB = [self openDatabase];
     
-    NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForKey:key]];
+    NSArray *values = [self queryDatabase:DB statement:[self _selectOneQueryForIndex:index]];
     if (values) value = [values objectAtIndex:0];
     if (value) value = [value objectForKey:@"value"];
     
     [self closeDatabase:DB];
     
     return value;
+
+}
+
+-(id)objectsMatchingIndex:(NSString*)index {
+    
+    sqlite3* DB = [self openDatabase];
+    
+    NSMutableArray *array = [NSMutableArray array];
+    
+    NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForIndex:index]];
+    for (NSDictionary *row in values) {
+        [array addObject:[row objectForKey:@"value"]];
+    }
+    
+    [self closeDatabase:DB];
+    
+    return array;
 }
 
 -(void)removeValueForKey:(NSString *)key {
@@ -142,7 +178,7 @@ static KVDB *kvdbInstance = NULL;
     
     sqlite3* DB = [self openDatabase];
     
-    value = [self queryDatabase:DB statement:[NSString stringWithFormat:@"SELECT key, value FROM %@", kKVDBTableName]];
+    value = [self queryDatabase:DB statement:[NSString stringWithFormat:@"SELECT key FROM %@", kKVDBTableName]];
     
     [self closeDatabase:DB];
     
@@ -152,9 +188,8 @@ static KVDB *kvdbInstance = NULL;
 -(NSUInteger)count {
     
     sqlite3* DB = [self openDatabase];
-    NSArray *records = nil;
     NSInteger ct = 0;
-    records = [self queryDatabase:DB statement:[NSString stringWithFormat:@"Select count(*) as value from %@", kKVDBTableName]];
+    NSArray *records = [self queryDatabase:DB statement:[NSString stringWithFormat:@"select count(key) as value from %@", kKVDBTableName]];
     if (records != nil) {
         ct = [[[records objectAtIndex:0] objectForKey:@"value"] intValue];
     }
@@ -169,11 +204,11 @@ static KVDB *kvdbInstance = NULL;
 
 -(void)createDBFile {
     NSFileManager *fm = [NSFileManager defaultManager];
-//    NSError *error = nil;
     
     if ([fm fileExistsAtPath:self.file]) {
-//        [fm removeItemAtPath:self.file error:&error];
-//        if (error) @throw KVDBExceptionWrite();
+        sqlite3 *db = [self openDatabase];
+        [self _ensureLatestTableStructure:db];
+        [self closeDatabase:db];
     }
     
     [self createDatabase];
@@ -188,11 +223,27 @@ static KVDB *kvdbInstance = NULL;
         @throw KVDBExceptionDBOpen();
     }
     
+    sqlite3_busy_timeout(db, 10000);
+    
     return db;
 }
 
 -(void)closeDatabase:(sqlite3 *)db {
     sqlite3_close(db);
+}
+
+-(id)_getColumn:(NSString *)colName forKey:(NSString *)key {
+    NSDictionary* value = nil;
+    
+    sqlite3* DB = [self openDatabase];
+    
+    NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForKey:key columns:colName]];
+    if (values) value = [values objectAtIndex:0];
+    if (value) value = [value objectForKey:colName];
+    
+    [self closeDatabase:DB];
+    
+    return value;
 }
 
 /* Returns an array of rows */
@@ -260,12 +311,13 @@ static KVDB *kvdbInstance = NULL;
         resultBlock(NO, [NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);
     }
     
-    sqlite3_finalize(stmt);
-    
     resultBlock(YES, [NSDictionary dictionaryWithObjectsAndKeys:
                       [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)], @"lastRowID",
                         [NSNumber numberWithInt:sqlite3_changes(db)], @"rowsChanged"
                       , nil]);
+    
+    sqlite3_reset(stmt);
+    sqlite3_finalize(stmt);    
 }
 
 -(NSArray *)tablesInDatabase:(sqlite3 *)db {
@@ -293,8 +345,26 @@ static KVDB *kvdbInstance = NULL;
             kKVDBTableName, key];
 }
 
+-(NSString *)_upsertQueryWithKey:(NSString *)key index:(NSString *)index {
+    return [NSString stringWithFormat:@"INSERT OR REPLACE INTO `%@` (`key`,`value`,`_index`)" // table
+            "VALUES ( '%@', '%@', ?); COMMIT;",
+            kKVDBTableName, key, index];
+}
+
 -(NSString *)_selectQueryForKey:(NSString *)key {
-    return [NSString stringWithFormat:@"SELECT key, value FROM %@ WHERE key='%@'", kKVDBTableName, key];
+    return [NSString stringWithFormat:@"SELECT key, value, _index FROM %@ WHERE key='%@'", kKVDBTableName, key];
+}
+
+-(NSString *)_selectQueryForKey:(NSString *)key columns:(NSString *)columns {
+    return [NSString stringWithFormat:@"SELECT %@ FROM %@ WHERE key='%@'", columns, kKVDBTableName, key];
+}
+
+-(NSString *)_selectQueryForIndex:(NSString *)index {
+    return [NSString stringWithFormat:@"SELECT value FROM %@ WHERE _index LIKE '%%%@%%'", kKVDBTableName, index];
+}
+
+-(NSString *)_selectOneQueryForIndex:(NSString *)index {
+    return [[self _selectQueryForIndex:index] stringByAppendingString:@" LIMIT 1"];
 }
 
 -(NSString *)_deleteQueryForKey:(NSString *)key {
@@ -350,6 +420,17 @@ static KVDB *kvdbInstance = NULL;
 -(id)unarchiveData:(NSData *)data {
     if (data == nil) return nil;
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
+}
+
+-(void)_ensureLatestTableStructure:(sqlite3*)db {
+    [self queryDatabase:db 
+              statement:@"select sql from sqlite_master where type='table' and name='kvdb';"
+                 result:^(NSDictionary *result) {
+                     if (![[result objectForKey:@"sql"] isEqualToString:_schema])
+                         /* Schema must be updated. */
+                         [self dropDatabase];
+                         [self createDatabase];
+                 }];
 }
 
 @end

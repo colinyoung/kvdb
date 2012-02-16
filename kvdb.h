@@ -16,6 +16,9 @@
 -(void)setValue:(id)object forKey:(NSString *)key;
 -(void)removeValueForKey:(NSString *)key;
 -(id)valueForKey:(NSString *)key;
+-(id)indexForKey:(NSString *)key;
+-(id)firstObjectMatchingIndex:(NSString*)index;
+-(id)objectsMatchingIndex:(NSString*)index;
 
 /* Compatibilty with other frameworks */
 -(void)setObject:(id)object forKey:(NSString *)key;
