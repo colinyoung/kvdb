@@ -237,7 +237,7 @@ static KVDB *kvdbInstance = NULL;
     
     sqlite3* DB = [self openDatabase];
     
-    NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForKey:key columns:colName]];
+    NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForKey:key]];
     if (values) value = [values objectAtIndex:0];
     if (value) value = [value objectForKey:colName];
     
@@ -265,12 +265,20 @@ static KVDB *kvdbInstance = NULL;
         
         NSString *key = [NSString stringWithCString:keyText encoding:NSUTF8StringEncoding];
         NSData *blob = [NSData dataWithBytes:sqlite3_column_blob(stmt, 1) length:sqlite3_column_bytes(stmt, 1)];
+        const char *indexText = (const char*)sqlite3_column_text(stmt, 2);
+        
+        NSString *index = nil;
+        if (indexText != nil)
+            index = [NSString stringWithCString:indexText encoding:NSUTF8StringEncoding];
+        
         NSMutableDictionary *rowDict = [NSMutableDictionary dictionaryWithObject:key forKey:@"key"];
                           
         if ([blob length]) {
             id value = [self unarchiveData:blob];
             [rowDict setObject:value forKey:@"value"];
         }
+        
+        if ([index length]) [rowDict setObject:index forKey:@"index"];
         
         [array addObject:rowDict];
     }
@@ -346,8 +354,11 @@ static KVDB *kvdbInstance = NULL;
 }
 
 -(NSString *)_upsertQueryWithKey:(NSString *)key index:(NSString *)index {
+    if ([[NSString stringWithFormat:@"%@", index] rangeOfString:@"(null)"].location != NSNotFound)
+        index = @"";
+    
     return [NSString stringWithFormat:@"INSERT OR REPLACE INTO `%@` (`key`,`value`,`_index`)" // table
-            "VALUES ( '%@', '%@', ?); COMMIT;",
+            "VALUES ( '%@', ?, '%@'); COMMIT;",
             kKVDBTableName, key, index];
 }
 
