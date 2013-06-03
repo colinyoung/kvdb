@@ -35,7 +35,7 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 static KVDB *kvdbInstance = nil;
 
-+ (KVDB*)sharedDB
++ (id)sharedDB
 {
     @synchronized(self)
     {
@@ -46,7 +46,7 @@ static KVDB *kvdbInstance = nil;
     return kvdbInstance;
 }
 
-+ (KVDB*)sharedDBUsingFile:(NSString *)file
++ (id)sharedDBUsingFile:(NSString *)file
 {
     @synchronized(self)
     {

@@ -6,8 +6,9 @@
 }
 @property (nonatomic, retain) NSString *file;
 
-+(id)sharedDB;
-+ (KVDB*)sharedDBUsingFile:(NSString *)file;
++ (id)sharedDB;
++ (id)sharedDBUsingFile:(NSString *)file;
+
 -(id)initWithSQLFile:(NSString *)sqliteFile;
 
 -(void)createDatabase;
