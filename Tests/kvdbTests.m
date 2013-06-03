@@ -16,16 +16,31 @@
 - (void)setUp
 {
     [super setUp];
+    
     [[KVDB sharedDB] dropDatabase];
-    // Set-up code here.
+    [[KVDB sharedDB] createDatabase];
 }
 
 - (void)tearDown
 {
-    // Tear-down code here.
-    
     [super tearDown];
+    
     [[KVDB sharedDB] dropDatabase];
+}
+
+- (void)testCount {
+    KVDB *DB = [KVDB sharedDB];
+    STAssertEquals((int)DB.count, 0, nil);
+
+    NSString *testString = @"Test string is awesome.";
+    NSString *testKey = @"test_str_key";
+    [DB setValue:testString forKey:testKey];
+
+    STAssertEquals((int)DB.count, 1, nil);
+    
+    [DB removeValueForKey:testKey];
+
+    STAssertEquals((int)DB.count, 0, nil);
 }
 
 @end

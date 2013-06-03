@@ -33,13 +33,13 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 #define kDefaultSQLFile @"kvdb.sqlite3"
 
-static KVDB *kvdbInstance = NULL;
+static KVDB *kvdbInstance = nil;
 
 + (KVDB*)sharedDB
 {
     @synchronized(self)
     {
-        if (kvdbInstance == NULL)
+        if (kvdbInstance == nil)
             kvdbInstance = [[self alloc] initWithSQLFile:kDefaultSQLFile];
     }
     
@@ -50,7 +50,7 @@ static KVDB *kvdbInstance = NULL;
 {
     @synchronized(self)
     {
-        if (kvdbInstance == NULL)
+        if (kvdbInstance == nil)
             kvdbInstance = [[self alloc] initWithSQLFile:file];
     }
     
@@ -68,8 +68,11 @@ static KVDB *kvdbInstance = NULL;
 }
          
 -(void)dealloc {
-    _file = nil; [_file release];    
+    _file = nil;
+#if ! __has_feature(objc_arc)
+    [_file release];
     [super dealloc];
+#endif
 }
 
 #pragma mark - DB Setup
@@ -150,13 +153,16 @@ static KVDB *kvdbInstance = NULL;
 }
 
 -(NSUInteger)count {
-    
     sqlite3* DB = [self openDatabase];
     NSArray *records = nil;
     NSInteger ct = 0;
+
     records = [self queryDatabase:DB statement:[NSString stringWithFormat:@"Select count(*) as value from %@", kKVDBTableName]];
+    
     if (records != nil) {
-        ct = [[[records objectAtIndex:0] objectForKey:@"value"] intValue];
+        // TODO
+
+        ct = [[[records objectAtIndex:0] objectForKey:@"key"] intValue];
     }
     [self closeDatabase:DB];    
     return ct;
@@ -233,10 +239,20 @@ static KVDB *kvdbInstance = NULL;
 -(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
     
     char *errMsg;
+#if __has_feature(objc_arc)
+    int result = sqlite3_exec(db, [statement UTF8String], kvdbQueryCallback, (__bridge void *)(resultBlock), &errMsg);
+#else
     int result = sqlite3_exec(db, [statement UTF8String], kvdbQueryCallback, resultBlock, &errMsg);
+#endif
+
     if (result != SQLITE_OK) {
+#if __has_feature(objc_arc)
+        NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
+#else
         NSString *errorMsg = [[[NSString alloc] initWithUTF8String:errMsg] autorelease];
-        sqlite3_free(errMsg);        
+#endif
+        
+        sqlite3_free(errMsg);
         resultBlock([NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);    
         return;
     }
@@ -256,7 +272,13 @@ static KVDB *kvdbInstance = NULL;
     int status = sqlite3_step(stmt);
     if (status != SQLITE_DONE) {
         const char* errMsg = sqlite3_errmsg(db);
+        
+#if __has_feature(objc_arc)
+        NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
+#else
         NSString *errorMsg = [[[NSString alloc] initWithUTF8String:errMsg] autorelease];
+#endif
+
         resultBlock(NO, [NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);
     }
     
@@ -379,8 +401,13 @@ int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column) {
         
         if (value != nil) [row setObject:value forKey:columnName];
     }
-    
+
+#if __has_feature(objc_arc)
+    KVDictBlock objcBlk = (__bridge KVDictBlock)(resultBlock);
+#else
     KVDictBlock objcBlk = resultBlock;
+#endif
+
     objcBlk(row);
     
     return 0;

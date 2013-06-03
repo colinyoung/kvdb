@@ -23,13 +23,13 @@
 		86C5B911175CAF2200E7BC09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B8E8175CAF2100E7BC09 /* UIKit.framework */; };
 		86C5B912175CAF2200E7BC09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B8EA175CAF2100E7BC09 /* Foundation.framework */; };
 		86C5B91A175CAF2200E7BC09 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86C5B918175CAF2200E7BC09 /* InfoPlist.strings */; };
-		86C5B91D175CAF2200E7BC09 /* kvdbAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B91C175CAF2200E7BC09 /* kvdbAppTests.m */; };
 		86C5B92B175CAF3A00E7BC09 /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B928175CAF3A00E7BC09 /* kvdb.m */; };
-		86C5B92C175CAF3A00E7BC09 /* KVDBFunctions.h in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B92A175CAF3A00E7BC09 /* KVDBFunctions.h */; };
 		86C5B936175CAF4600E7BC09 /* DatabaseTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */; };
 		86C5B937175CAF4600E7BC09 /* FilesTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B931175CAF4600E7BC09 /* FilesTestCase.m */; };
 		86C5B938175CAF4600E7BC09 /* kvdbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B933175CAF4600E7BC09 /* kvdbTests.m */; };
 		86C5B939175CAF4600E7BC09 /* SerializationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */; };
+		86C5B93A175CB0CD00E7BC09 /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */; };
+		86C5B93C175CB0F500E7BC09 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,8 +64,6 @@
 		86C5B90F175CAF2200E7BC09 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
 		86C5B917175CAF2200E7BC09 /* kvdbAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kvdbAppTests-Info.plist"; sourceTree = "<group>"; };
 		86C5B919175CAF2200E7BC09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		86C5B91B175CAF2200E7BC09 /* kvdbAppTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kvdbAppTests.h; sourceTree = "<group>"; };
-		86C5B91C175CAF2200E7BC09 /* kvdbAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = kvdbAppTests.m; sourceTree = "<group>"; };
 		86C5B927175CAF3A00E7BC09 /* kvdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kvdb.h; sourceTree = "<group>"; };
 		86C5B928175CAF3A00E7BC09 /* kvdb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdb.m; sourceTree = "<group>"; };
 		86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVDBFunctions.m; sourceTree = "<group>"; };
@@ -78,6 +76,7 @@
 		86C5B933175CAF4600E7BC09 /* kvdbTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
 		86C5B934175CAF4600E7BC09 /* SerializationTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializationTestCase.h; sourceTree = "<group>"; };
 		86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
+		86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +84,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86C5B93C175CB0F500E7BC09 /* libsqlite3.dylib in Frameworks */,
 				86C5B8E9175CAF2100E7BC09 /* UIKit.framework in Frameworks */,
 				86C5B8EB175CAF2100E7BC09 /* Foundation.framework in Frameworks */,
 				86C5B8ED175CAF2100E7BC09 /* CoreGraphics.framework in Frameworks */,
@@ -127,6 +127,7 @@
 		86C5B8E7175CAF2100E7BC09 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */,
 				86C5B8E8175CAF2100E7BC09 /* UIKit.framework */,
 				86C5B8EA175CAF2100E7BC09 /* Foundation.framework */,
 				86C5B8EC175CAF2100E7BC09 /* CoreGraphics.framework */,
@@ -167,8 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				86C5B92D175CAF4600E7BC09 /* Tests */,
-				86C5B91B175CAF2200E7BC09 /* kvdbAppTests.h */,
-				86C5B91C175CAF2200E7BC09 /* kvdbAppTests.m */,
 				86C5B916175CAF2200E7BC09 /* Supporting Files */,
 			);
 			path = kvdbAppTests;
@@ -326,7 +325,7 @@
 				86C5B8F9175CAF2100E7BC09 /* AppDelegate.m in Sources */,
 				86C5B908175CAF2200E7BC09 /* ViewController.m in Sources */,
 				86C5B92B175CAF3A00E7BC09 /* kvdb.m in Sources */,
-				86C5B92C175CAF3A00E7BC09 /* KVDBFunctions.h in Sources */,
+				86C5B93A175CB0CD00E7BC09 /* KVDBFunctions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -334,7 +333,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86C5B91D175CAF2200E7BC09 /* kvdbAppTests.m in Sources */,
 				86C5B936175CAF4600E7BC09 /* DatabaseTestCase.m in Sources */,
 				86C5B937175CAF4600E7BC09 /* FilesTestCase.m in Sources */,
 				86C5B938175CAF4600E7BC09 /* kvdbTests.m in Sources */,
@@ -521,6 +519,7 @@
 				86C5B922175CAF2200E7BC09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		86C5B923175CAF2200E7BC09 /* Build configuration list for PBXNativeTarget "kvdbAppTests" */ = {
 			isa = XCConfigurationList;
@@ -529,6 +528,7 @@
 				86C5B925175CAF2200E7BC09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -7,7 +7,9 @@
 //
 
 #import "FilesTestCase.h"
+
 #import "KVDB.h"
+#import "KVDBFunctions.h"
 
 #import <UIKit/UIKit.h>
 //#import "application_headers" as required
