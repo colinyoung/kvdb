@@ -17,6 +17,7 @@
 
 - (void)setUp {
     [super setUp];
+    
     [[KVDB sharedDB] dropDatabase];
     [[KVDB sharedDB] createDatabase];
 }
