@@ -1,5 +1,5 @@
 #import "KVDB.h"
-#import "KVDB/KVDBFunctions.h"
+#import "KVDBFunctions.h"
 
 typedef void(^KVBlock)(void);
 typedef void(^KVDictBlock)(NSDictionary *dict);
