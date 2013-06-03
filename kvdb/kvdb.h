@@ -9,22 +9,22 @@
 + (id)sharedDB;
 + (id)sharedDBUsingFile:(NSString *)file;
 
--(id)initWithSQLFile:(NSString *)sqliteFile;
+- (id)initWithSQLFile:(NSString *)sqliteFile;
 
--(void)createDatabase;
--(void)dropDatabase;
+- (void)createDatabase;
+- (void)dropDatabase;
 
--(void)setValue:(id)object forKey:(NSString *)key;
--(void)removeValueForKey:(NSString *)key;
--(id)valueForKey:(NSString *)key;
+- (void)setValue:(id)object forKey:(NSString *)key;
+- (void)removeValueForKey:(NSString *)key;
+- (id)valueForKey:(NSString *)key;
 
 /* Compatibilty with other frameworks */
--(void)setObject:(id)object forKey:(NSString *)key;
--(void)removeObjectForKey:(NSString *)key;
--(id)objectForKey:(NSString *)key;
+- (void)setObject:(id)object forKey:(NSString *)key;
+- (void)removeObjectForKey:(NSString *)key;
+- (id)objectForKey:(NSString *)key;
 
--(NSArray *)allObjects;
--(NSUInteger)count;
+- (NSArray *)allObjects;
+- (NSUInteger)count;
 
 @end
 

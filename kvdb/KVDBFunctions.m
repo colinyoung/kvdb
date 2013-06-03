@@ -4,7 +4,6 @@ NSString * KVDocumentsDirectory(void) {
     return [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
 }
 
-
 NSException * KVDBExceptionWrite(void) {
     return [NSException exceptionWithName:@"WriteError" reason:@"Couldn't write to NSDocuments Directory." userInfo:nil];
 }

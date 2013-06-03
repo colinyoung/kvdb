@@ -8,22 +8,22 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 @interface KVDB (Private)
 
--(void)createDBFile;
--(sqlite3*)openDatabase;
--(void)closeDatabase:(sqlite3*)db;
--(NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement;
--(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
--(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
--(NSArray *)tablesInDatabase:(sqlite3 *)db;
+- (void)createDBFile;
+- (sqlite3*)openDatabase;
+- (void)closeDatabase:(sqlite3*)db;
+- (NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement;
+- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
+- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
+- (NSArray *)tablesInDatabase:(sqlite3 *)db;
 
--(NSString *)_upsertQueryWithKey:(NSString *)key;
--(NSString *)_selectQueryForKey:(NSString *)key;
--(NSString *)_deleteQueryForKey:(NSString *)key;
--(void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob;
--(NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob;
+- (NSString *)_upsertQueryWithKey:(NSString *)key;
+- (NSString *)_selectQueryForKey:(NSString *)key;
+- (NSString *)_deleteQueryForKey:(NSString *)key;
+- (void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob;
+- (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob;
 
--(NSData*)archiveObject:(id)object;
--(id)unarchiveData:(NSData*)data;
+- (NSData*)archiveObject:(id)object;
+- (id)unarchiveData:(NSData*)data;
 
 @end
 
@@ -57,7 +57,7 @@ static KVDB *kvdbInstance = nil;
     return kvdbInstance;
 }
 
--(id)initWithSQLFile:(NSString *)sqliteFile {
+- (id)initWithSQLFile:(NSString *)sqliteFile {
     self = [super init];
     if (self) {
         self.file = [KVDocumentsDirectory() stringByAppendingPathComponent:sqliteFile];
@@ -67,7 +67,7 @@ static KVDB *kvdbInstance = nil;
     return self;
 }
          
--(void)dealloc {
+- (void)dealloc {
     _file = nil;
 #if ! __has_feature(objc_arc)
     [_file release];
@@ -76,7 +76,8 @@ static KVDB *kvdbInstance = nil;
 }
 
 #pragma mark - DB Setup
--(void)createDatabase {
+
+- (void)createDatabase {
     
     sqlite3* db = [self openDatabase];
     [self queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB)", kKVDBTableName]];
@@ -87,14 +88,15 @@ static KVDB *kvdbInstance = nil;
     [self closeDatabase:db];
 }
 
--(void)dropDatabase {
+- (void)dropDatabase {
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:self.file error:&error];
     if (error) @throw KVDBExceptionWrite();
 }
 
 #pragma mark - DB functions
--(void)setValue:(id)object forKey:(NSString *)key {
+
+- (void)setValue:(id)object forKey:(NSString *)key {
     sqlite3* DB = [self openDatabase];
     
     [self queryDatabase:DB
@@ -107,7 +109,7 @@ static KVDB *kvdbInstance = nil;
     [self closeDatabase:DB];
 }
 
--(id)valueForKey:(NSString *)key {
+- (id)valueForKey:(NSString *)key {
     NSDictionary* value = nil;
     
     sqlite3* DB = [self openDatabase];
@@ -121,7 +123,7 @@ static KVDB *kvdbInstance = nil;
     return value;
 }
 
--(void)removeValueForKey:(NSString *)key {
+- (void)removeValueForKey:(NSString *)key {
     sqlite3* DB = [self openDatabase];
     
     [self queryDatabase:DB statement:[self _deleteQueryForKey:key]];
@@ -129,18 +131,21 @@ static KVDB *kvdbInstance = nil;
     [self closeDatabase:DB];
 }
 
-#pragma mark Compatibilty
--(void)setObject:(id)object forKey:(NSString *)key {
+#pragma mark - Compatibilty
+
+- (void)setObject:(id)object forKey:(NSString *)key {
     [self setValue:object forKey:key];
 }
--(void)removeObjectForKey:(NSString *)key {
+
+- (void)removeObjectForKey:(NSString *)key {
     [self removeValueForKey:key];
 }
--(id)objectForKey:(NSString *)key {
+
+- (id)objectForKey:(NSString *)key {
     return [self valueForKey:key];
 }
 
--(NSArray *)allObjects {
+- (NSArray *)allObjects {
     id value = nil;
     
     sqlite3* DB = [self openDatabase];
@@ -152,7 +157,7 @@ static KVDB *kvdbInstance = nil;
     return value;    
 }
 
--(NSUInteger)count {
+- (NSUInteger)count {
     sqlite3* DB = [self openDatabase];
     NSArray *records = nil;
     NSInteger ct = 0;
@@ -171,9 +176,10 @@ static KVDB *kvdbInstance = nil;
 @end
 
 #pragma mark - Private methods
+
 @implementation KVDB (Private)
 
--(void)createDBFile {
+- (void)createDBFile {
     NSFileManager *fm = [NSFileManager defaultManager];
 //    NSError *error = nil;
     
@@ -186,7 +192,8 @@ static KVDB *kvdbInstance = nil;
 }
 
 #pragma mark - SQLITE methods
--(sqlite3*)openDatabase {
+
+- (sqlite3*)openDatabase {
     sqlite3* db = NULL;
     
     const char *dbpath = [self.file UTF8String];
@@ -197,12 +204,12 @@ static KVDB *kvdbInstance = nil;
     return db;
 }
 
--(void)closeDatabase:(sqlite3 *)db {
+- (void)closeDatabase:(sqlite3 *)db {
     sqlite3_close(db);
 }
 
 /* Returns an array of rows */
--(NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
+- (NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
     const char *sql = [statement UTF8String];
     const char *tail;
     sqlite3_stmt *stmt;
@@ -236,7 +243,7 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Doesn't use blobs, so simply queries. */
--(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
+- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
     
     char *errMsg;
 #if __has_feature(objc_arc)
@@ -259,7 +266,7 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Writes blobs, so it uses transactions */
--(void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary *))resultBlock {
+- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary *))resultBlock {
     
     // @todo this is totally inflexible to argument count
     const char *sql = [statement UTF8String];
@@ -290,7 +297,7 @@ static KVDB *kvdbInstance = nil;
                       , nil]);
 }
 
--(NSArray *)tablesInDatabase:(sqlite3 *)db {
+- (NSArray *)tablesInDatabase:(sqlite3 *)db {
     [self queryDatabase:db 
               statement:@"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
                  result:^(NSDictionary *result) {
@@ -309,23 +316,23 @@ static KVDB *kvdbInstance = nil;
     Updates or inserts safely.
  http://stackoverflow.com/questions/418898/sqlite-upsert-not-insert-or-replace/4253806#4253806
  */
--(NSString *)_upsertQueryWithKey:(NSString *)key {
+- (NSString *)_upsertQueryWithKey:(NSString *)key {
     return [NSString stringWithFormat:@"INSERT OR REPLACE INTO `%@` (`key`,`value`)" // table
             "VALUES ( '%@', ?); COMMIT;",
             kKVDBTableName, key];
 }
 
--(NSString *)_selectQueryForKey:(NSString *)key {
+- (NSString *)_selectQueryForKey:(NSString *)key {
     return [NSString stringWithFormat:@"SELECT key, value FROM %@ WHERE key='%@'", kKVDBTableName, key];
 }
 
--(NSString *)_deleteQueryForKey:(NSString *)key {
+- (NSString *)_deleteQueryForKey:(NSString *)key {
     return [NSString stringWithFormat:@"DELETE FROM %@ WHERE key='%@'", kKVDBTableName, key];
 }
 
 
 /* Call this function with a sqlite3_blob* initialized to NULL. */
--(void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob {
+- (void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob {
 
     if (*blob != NULL) {
         @throw [NSException exceptionWithName:@"SQLITEError" reason:@"Can only write to NULL blobs." userInfo:nil];
@@ -348,7 +355,7 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Call this function with a sqlite3_blob* initialized to NULL. */
--(NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob
+- (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob
 {
     if (*blob != NULL) {
         @throw [NSException exceptionWithName:@"SQLITEError" reason:@"Can only read to NULL blobs." userInfo:nil];
@@ -365,11 +372,11 @@ static KVDB *kvdbInstance = nil;
     return [NSData dataWithBytes:byteBuff length:byteCt];
 }
 
--(NSData *)archiveObject:(id)object {
+- (NSData *)archiveObject:(id)object {
     return [NSKeyedArchiver archivedDataWithRootObject:object];
 }
 
--(id)unarchiveData:(NSData *)data {
+- (id)unarchiveData:(NSData *)data {
     if (data == nil) return nil;
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
