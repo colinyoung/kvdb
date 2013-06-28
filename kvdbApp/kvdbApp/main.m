@@ -1,9 +1,9 @@
 //
 //  main.m
-//  kvdb
+//  kvdbApp
 //
-//  Created by Colin Young on 2/5/12.
-//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
+//  Created by Stanislaw Pankevich on 6/3/13.
+//  Copyright (c) 2013 Stanislaw Pankevich. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
