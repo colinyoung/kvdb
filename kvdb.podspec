@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "kvdb"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "a key-value object store backed by SQLite3 for iOS."
   # s.description  = <<-DESC
   #                   An optional longer description of kvdb
