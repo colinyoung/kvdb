@@ -35,8 +35,7 @@ typedef void(^KVDictBlock)(NSDictionary *dict);
 
 static KVDB *kvdbInstance = nil;
 
-+ (id)sharedDB
-{
++ (id)sharedDB {
     @synchronized(self)
     {
         if (kvdbInstance == nil)
@@ -46,10 +45,8 @@ static KVDB *kvdbInstance = nil;
     return kvdbInstance;
 }
 
-+ (id)sharedDBUsingFile:(NSString *)file
-{
-    @synchronized(self)
-    {
++ (id)sharedDBUsingFile:(NSString *)file {
+    @synchronized(self) {
         if (kvdbInstance == nil)
             kvdbInstance = [[self alloc] initWithSQLFile:file];
     }
@@ -57,16 +54,37 @@ static KVDB *kvdbInstance = nil;
     return kvdbInstance;
 }
 
++ (id)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory {
+    @synchronized(self) {
+        if (kvdbInstance == nil)
+            kvdbInstance = [[self alloc] initWithSQLFile:file inDirectory:directory];
+    }
+
+    return kvdbInstance;
+}
+
 - (id)initWithSQLFile:(NSString *)sqliteFile {
     self = [super init];
     if (self) {
         self.file = [KVDocumentsDirectory() stringByAppendingPathComponent:sqliteFile];
+
         NSLog(@"Initializing Shared DB with file: %@", self.file);
         [self createDBFile];
     }
     return self;
 }
-         
+
+- (id)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory {
+    self = [super init];
+    if (self) {
+        self.file = [directory stringByAppendingPathComponent:sqliteFile];
+        
+        NSLog(@"Initializing Shared DB with file: %@", self.file);
+        [self createDBFile];
+    }
+    return self;
+}
+
 - (void)dealloc {
     _file = nil;
 #if ! __has_feature(objc_arc)

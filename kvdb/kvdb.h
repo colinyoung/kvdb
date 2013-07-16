@@ -4,12 +4,15 @@
 @interface KVDB : NSObject {
     NSString *_file;
 }
+
 @property (nonatomic, retain) NSString *file;
 
 + (id)sharedDB;
 + (id)sharedDBUsingFile:(NSString *)file;
++ (id)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory;
 
 - (id)initWithSQLFile:(NSString *)sqliteFile;
+- (id)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory;
 
 - (void)createDatabase;
 - (void)dropDatabase;
