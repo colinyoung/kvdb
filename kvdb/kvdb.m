@@ -114,12 +114,17 @@ static KVDB *kvdbInstance = nil;
 
 #pragma mark - DB functions
 
-- (void)setValue:(id)object forKey:(NSString *)key {
-    sqlite3* DB = [self openDatabase];
+- (void)setValue:(id)value forKey:(NSString *)key {
+    if (value == nil) {
+        NSString *reasonString = [NSString stringWithFormat:@"%s : value cannot be nil - use NSNull instead!", __PRETTY_FUNCTION__];
+        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reasonString userInfo:nil];
+    }
+
+    sqlite3 *DB = [self openDatabase];
     
     [self queryDatabase:DB
               statement:[self _upsertQueryWithKey:key]
-                   data:[self archiveObject:object]
+                   data:[self archiveObject:value]
                  result:^(BOOL success, NSDictionary *result) {
         // Null implementation, this could get slow.
     }];
@@ -128,11 +133,12 @@ static KVDB *kvdbInstance = nil;
 }
 
 - (id)valueForKey:(NSString *)key {
-    NSDictionary* value = nil;
+    NSDictionary *value = nil;
     
-    sqlite3* DB = [self openDatabase];
+    sqlite3 *DB = [self openDatabase];
     
     NSArray *values = [self queryDatabase:DB statement:[self _selectQueryForKey:key]];
+
     if (values) value = [values objectAtIndex:0];
     if (value) value = [value objectForKey:@"value"];
     
@@ -166,7 +172,7 @@ static KVDB *kvdbInstance = nil;
 - (NSArray *)allObjects {
     id value = nil;
     
-    sqlite3* DB = [self openDatabase];
+    sqlite3 *DB = [self openDatabase];
     
     value = [self queryDatabase:DB statement:[NSString stringWithFormat:@"SELECT key, value FROM %@", kKVDBTableName]];
     
@@ -227,7 +233,7 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Returns an array of rows */
-- (NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
+- (NSArray *)queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
     const char *sql = [statement UTF8String];
     const char *tail;
     sqlite3_stmt *stmt;
@@ -245,6 +251,7 @@ static KVDB *kvdbInstance = nil;
         
         NSString *key = [NSString stringWithCString:keyText encoding:NSUTF8StringEncoding];
         NSData *blob = [NSData dataWithBytes:sqlite3_column_blob(stmt, 1) length:sqlite3_column_bytes(stmt, 1)];
+
         NSMutableDictionary *rowDict = [NSMutableDictionary dictionaryWithObject:key forKey:@"key"];
                           
         if ([blob length]) {

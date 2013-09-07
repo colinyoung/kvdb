@@ -54,6 +54,29 @@ or you can just clone `kvdb` and add `kvdb/` folder to your project.
 [KVDB sharedDBWithFile:@"blah.sqlite3"] // the file will be created in your documents directory.
 ```
 
+## Coding nil-values: nil vs NSNull
+
+To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` denies the coding of `nil` values. Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want to use `-[KVDB setValue:forKey]` provide a given key with a null value.
+
+So use
+
+```objective-c
+[[KVDB sharedDB] setValue:[NSNull null] forKey:@"fruit"];
+
+id dbValue = [[KVDB sharedDB] valueForKey:testKey]; 
+
+NSLog(@"%@", dbValue); // will print "<null>" i.e.  NSNull singleton
+```
+
+Instead of
+
+```objective-c
+[[KVDB sharedDB] setValue:nil forKey:@"fruit"]; // => Results in NSInternalInconsistencyException
+```
+
+See [the documentation of -[NSDictionary setObject:forKey:]](https://developer.apple.com/library/ios/documentation/cocoa/reference/foundation/Classes/NSMutableDictionary_Class/Reference/Reference.html#//apple_ref/occ/instm/NSMutableDictionary/setObject:forKey:)
+and this nice [NSHipster article about nil and NSNull](http://nshipster.com/nil/).
+
 ## Notes
 
 * `kvdb` is a simple `key value store for iOS` solution with codebase containing just a couple of files. Don't ask it what it is not intended for. For more serious solutions see "Similar tools".

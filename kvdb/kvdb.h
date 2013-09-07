@@ -17,11 +17,10 @@
 - (void)createDatabase;
 - (void)dropDatabase;
 
-- (void)setValue:(id)object forKey:(NSString *)key;
+- (void)setValue:(id)value forKey:(NSString *)key;
 - (void)removeValueForKey:(NSString *)key;
 - (id)valueForKey:(NSString *)key;
 
-/* Compatibilty with other frameworks */
 - (void)setObject:(id)object forKey:(NSString *)key;
 - (void)removeObjectForKey:(NSString *)key;
 - (id)objectForKey:(NSString *)key;

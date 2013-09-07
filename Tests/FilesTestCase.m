@@ -6,10 +6,13 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "FilesTestCase.h"
+#import <SenTestingKit/SenTestingKit.h>
 
 #import "KVDB.h"
 #import "KVDBFunctions.h"
+
+@interface FilesTestCase : SenTestCase
+@end
 
 @implementation FilesTestCase
 

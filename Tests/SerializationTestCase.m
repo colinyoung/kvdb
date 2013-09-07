@@ -6,14 +6,15 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import "SerializationTestCase.h"
+#import <SenTestingKit/SenTestingKit.h>
 
 #import <UIKit/UIKit.h>
 #import "KVDB.h"
 
-@implementation SerializationTestCase
+@interface SerializationTestCase : SenTestCase
+@end
 
-// All code under test is in the iOS Application
+@implementation SerializationTestCase
 
 - (void)setUp {
     [super setUp];

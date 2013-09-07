@@ -68,13 +68,9 @@
 		86C5B928175CAF3A00E7BC09 /* kvdb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdb.m; sourceTree = "<group>"; };
 		86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVDBFunctions.m; sourceTree = "<group>"; };
 		86C5B92A175CAF3A00E7BC09 /* KVDBFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KVDBFunctions.h; sourceTree = "<group>"; };
-		86C5B92E175CAF4600E7BC09 /* DatabaseTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DatabaseTestCase.h; sourceTree = "<group>"; };
 		86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
-		86C5B930175CAF4600E7BC09 /* FilesTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FilesTestCase.h; sourceTree = "<group>"; };
 		86C5B931175CAF4600E7BC09 /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
-		86C5B932175CAF4600E7BC09 /* kvdbTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kvdbTests.h; sourceTree = "<group>"; };
 		86C5B933175CAF4600E7BC09 /* kvdbTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
-		86C5B934175CAF4600E7BC09 /* SerializationTestCase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SerializationTestCase.h; sourceTree = "<group>"; };
 		86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
 		86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -197,13 +193,9 @@
 		86C5B92D175CAF4600E7BC09 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				86C5B92E175CAF4600E7BC09 /* DatabaseTestCase.h */,
 				86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */,
-				86C5B930175CAF4600E7BC09 /* FilesTestCase.h */,
 				86C5B931175CAF4600E7BC09 /* FilesTestCase.m */,
-				86C5B932175CAF4600E7BC09 /* kvdbTests.h */,
 				86C5B933175CAF4600E7BC09 /* kvdbTests.m */,
-				86C5B934175CAF4600E7BC09 /* SerializationTestCase.h */,
 				86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */,
 			);
 			name = Tests;
