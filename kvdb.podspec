@@ -1,14 +1,17 @@
 Pod::Spec.new do |s|
   s.name         = "kvdb"
-  s.version      = "0.0.2"
+  s.version      = "0.0.3"
   s.summary      = "a key-value object store backed by SQLite3 for iOS."
+
   # s.description  = <<-DESC
   #                   An optional longer description of kvdb
   #
   #                   * Markdown format.
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
+
   s.homepage     = "https://github.com/colinyoung/kvdb"
+
   # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
 
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
