@@ -1,11 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
-@interface KVDB : NSObject {
-    NSString *_file;
-}
-
-@property (nonatomic, retain) NSString *file;
+@interface KVDB : NSObject
 
 + (id)sharedDB;
 + (id)sharedDBUsingFile:(NSString *)file;
@@ -33,5 +29,3 @@
 - (NSUInteger)count;
 
 @end
-
-int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column);

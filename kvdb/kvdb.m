@@ -1,4 +1,6 @@
 #import "KVDB.h"
+#import "KVDB_Private.h"
+
 #import "KVDBFunctions.h"
 
 #if !__has_feature(objc_arc)
@@ -8,100 +10,89 @@
 typedef void(^KVBlock)(void);
 typedef void(^KVDictBlock)(NSDictionary *dict);
 
+static int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column);
+
 #define kKVDBTableName @"kvdb"
 
-@interface KVDB (Private)
-
-- (void)createDBFile;
-- (sqlite3*)openDatabase;
-- (void)closeDatabase:(sqlite3*)db;
-- (NSArray*)queryDatabase:(sqlite3 *)db statement:(NSString *)statement;
-- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
-- (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
-- (NSArray *)tablesInDatabase:(sqlite3 *)db;
-
-- (NSString *)_upsertQueryWithKey:(NSString *)key;
-- (NSString *)_selectQueryForKey:(NSString *)key;
-- (NSString *)_deleteQueryForKey:(NSString *)key;
-- (void)_writeObject:(id)objC inDatabase:(sqlite3*)DB toBlob:(sqlite3_blob**)blob;
-- (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob;
-
-- (NSData*)archiveObject:(id)object;
-- (id)unarchiveData:(NSData*)data;
-
-@end
-
 @implementation KVDB
-
-@synthesize file = _file;
 
 #define kDefaultSQLFile @"kvdb.sqlite3"
 
 static KVDB *kvdbInstance = nil;
 
+- (id)init {
+    NSString *reason = [NSString stringWithFormat:@"-[%@ init] must not be called directly. Use designated initializers instead: -[%@ initWithSQLFile:] or -[%@ initWithSQLFile:inDirectory:].", [self class], [self class], [self class]];
+    @throw [NSException exceptionWithName:NSGenericException reason:reason userInfo:nil];
+}
+
+- (id)initWithSQLFile:(NSString *)sqliteFile {
+    self = [self initWithSQLFile:sqliteFile inDirectory:KVDocumentsDirectory()];
+
+    if (self == nil) return nil;
+
+    return self;
+}
+
+- (id)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory {
+    self = [super init];
+
+    if (self == nil) return nil;
+
+    self.file = [directory stringByAppendingPathComponent:sqliteFile];
+
+    NSLog(@"Initializing Shared DB with file: %@", self.file);
+    [self createDBFile];
+
+    return self;
+}
+
+- (void)dealloc {
+    self.file = nil;
+}
+
 + (id)sharedDB {
-    @synchronized(self)
-    {
-        if (kvdbInstance == nil)
-            kvdbInstance = [[self alloc] initWithSQLFile:kDefaultSQLFile];
+    if (kvdbInstance == nil) {
+        @synchronized(self) {
+            if (kvdbInstance == nil) {
+                kvdbInstance = [[self alloc] initWithSQLFile:kDefaultSQLFile];
+            }
+        }
     }
-    
+
     return kvdbInstance;
 }
 
 + (id)sharedDBUsingFile:(NSString *)file {
-    @synchronized(self) {
-        if (kvdbInstance == nil)
-            kvdbInstance = [[self alloc] initWithSQLFile:file];
+    if (kvdbInstance == nil) {
+        @synchronized(self) {
+            if (kvdbInstance == nil) {
+                kvdbInstance = [[self alloc] initWithSQLFile:file];
+            }
+        }
     }
     
     return kvdbInstance;
 }
 
 + (id)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory {
-    @synchronized(self) {
-        if (kvdbInstance == nil)
-            kvdbInstance = [[self alloc] initWithSQLFile:file inDirectory:directory];
+    if (kvdbInstance == nil) {
+        @synchronized(self) {
+            if (kvdbInstance == nil) {
+                kvdbInstance = [[self alloc] initWithSQLFile:file inDirectory:directory];
+            }
+        }
     }
 
     return kvdbInstance;
 }
 
-- (id)initWithSQLFile:(NSString *)sqliteFile {
-    self = [super init];
-    if (self) {
-        self.file = [KVDocumentsDirectory() stringByAppendingPathComponent:sqliteFile];
-
-        NSLog(@"Initializing Shared DB with file: %@", self.file);
-        [self createDBFile];
-    }
-    return self;
-}
-
-- (id)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory {
-    self = [super init];
-    if (self) {
-        self.file = [directory stringByAppendingPathComponent:sqliteFile];
-        
-        NSLog(@"Initializing Shared DB with file: %@", self.file);
-        [self createDBFile];
-    }
-    return self;
-}
-
-- (void)dealloc {
-    _file = nil;
-}
-
 #pragma mark - DB Setup
 
 - (void)createDatabase {
-    
-    sqlite3* db = [self openDatabase];
+    sqlite3 *db = [self openDatabase];
     [self queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB)", kKVDBTableName]];
     
-    // Verify
-    [self tablesInDatabase:db];
+    [self ensureThatKVDBTableExistsInDB:db];
     
     [self closeDatabase:db];
 }
@@ -112,7 +103,7 @@ static KVDB *kvdbInstance = nil;
     if (error) @throw KVDBExceptionWrite();
 }
 
-#pragma mark - DB functions
+#pragma mark - NSKeyValueCoding compatibility
 
 - (void)setValue:(id)value forKey:(NSString *)key {
     if (value == nil) {
@@ -155,8 +146,6 @@ static KVDB *kvdbInstance = nil;
     [self closeDatabase:DB];
 }
 
-#pragma mark - Compatibilty
-
 - (void)setObject:(id)object forKey:(NSString *)key {
     [self setValue:object forKey:key];
 }
@@ -197,11 +186,7 @@ static KVDB *kvdbInstance = nil;
     return ct;
 }
 
-@end
-
 #pragma mark - Private methods
-
-@implementation KVDB (Private)
 
 - (void)createDBFile {
     NSFileManager *fm = [NSFileManager defaultManager];
@@ -217,8 +202,8 @@ static KVDB *kvdbInstance = nil;
 
 #pragma mark - SQLITE methods
 
-- (sqlite3*)openDatabase {
-    sqlite3* db = NULL;
+- (sqlite3 *)openDatabase {
+    sqlite3 *db = NULL;
     
     const char *dbpath = [self.file UTF8String];
     if (sqlite3_open(dbpath, &db) != SQLITE_OK) {
@@ -269,7 +254,6 @@ static KVDB *kvdbInstance = nil;
 
 /* Doesn't use blobs, so simply queries. */
 - (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
-    
     char *errMsg;
 
     int result = sqlite3_exec(db, [statement UTF8String], kvdbQueryCallback, (__bridge void *)(resultBlock), &errMsg);
@@ -277,10 +261,8 @@ static KVDB *kvdbInstance = nil;
     if (result != SQLITE_OK) {
         NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
 
-        
         sqlite3_free(errMsg);
-        resultBlock([NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);    
-        return;
+        resultBlock([NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);
     }
 }
 
@@ -312,17 +294,15 @@ static KVDB *kvdbInstance = nil;
                       , nil]);
 }
 
-- (NSArray *)tablesInDatabase:(sqlite3 *)db {
-    [self queryDatabase:db 
+- (void)ensureThatKVDBTableExistsInDB:(sqlite3 *)db {
+    [self queryDatabase:db
               statement:@"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
                  result:^(NSDictionary *result) {
-                     if (![[result objectForKey:@"name"] isEqualToString:kKVDBTableName])
+                     if ([[result objectForKey:@"name"] isEqualToString:kKVDBTableName] == NO)
                          @throw [NSException exceptionWithName:@"SQLITEError"
                                                         reason:[NSString stringWithFormat:@"There should have been a table called %@.", kKVDBTableName]
                                                       userInfo:nil];
     }];
-    
-    return nil;
 }
 
 #pragma mark - Data/query methods

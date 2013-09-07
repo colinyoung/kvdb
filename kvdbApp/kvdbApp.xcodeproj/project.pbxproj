@@ -73,6 +73,7 @@
 		86C5B933175CAF4600E7BC09 /* kvdbTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
 		86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
 		86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
+		86F52FAF17DBB9A800A7B538 /* KVDB_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVDB_Private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,6 +186,7 @@
 				86C5B928175CAF3A00E7BC09 /* kvdb.m */,
 				86C5B92A175CAF3A00E7BC09 /* KVDBFunctions.h */,
 				86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */,
+				86F52FAF17DBB9A800A7B538 /* KVDB_Private.h */,
 			);
 			name = kvdb;
 			path = ../kvdb;
