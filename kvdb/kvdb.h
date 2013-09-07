@@ -13,6 +13,7 @@
 - (void)createDatabase;
 - (void)dropDatabase;
 
+- (void)performBlock:(void(^)(id DB))block;
 - (void)performBlockAndWait:(void(^)(id DB))block;
 
 @end

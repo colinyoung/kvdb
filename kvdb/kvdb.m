@@ -124,6 +124,19 @@ static KVDB *kvdbInstance = nil;
 
 #pragma mark - Public API: Isolated access to database
 
+- (void)performBlock:(void(^)(id DB))block {
+    dispatch_async(self.isolationQueue, ^{
+        self.isolatedAccessDatabase = [self _openDatabase];
+        self.isAccessToDatabaseIsolated = YES;
+
+        block(self);
+
+        self.isAccessToDatabaseIsolated = NO;
+        [self _closeDatabase:self.isolatedAccessDatabase];
+        self.isolatedAccessDatabase = nil;
+    });
+}
+
 - (void)performBlockAndWait:(void(^)(id DB))block {
     dispatch_sync(self.isolationQueue, ^{
         self.isolatedAccessDatabase = [self _openDatabase];
@@ -214,7 +227,7 @@ static KVDB *kvdbInstance = nil;
     return count;
 }
 
-#pragma mark - Private methods
+#pragma mark - Private API
 
 - (void)_createDBFile {
     NSFileManager *fm = [NSFileManager defaultManager];
