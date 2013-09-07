@@ -8,14 +8,14 @@ Pod::Spec.new do |s|
   #                   * Markdown format.
   #                   * Don't worry about the indent, we strip it!
   #                  DESC
-  s.homepage     = "https://github.com/stanislaw/kvdb"
+  s.homepage     = "https://github.com/colinyoung/kvdb"
   # s.screenshots  = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
 
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
 
   s.author       = { "Colin Young" => "me@colinyoung.com" }
 
-  s.source       = { :git => "https://github.com/stanislaw/kvdb.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/colinyoung/kvdb.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '5.0'
 
