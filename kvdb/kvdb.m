@@ -1,6 +1,10 @@
 #import "KVDB.h"
 #import "KVDBFunctions.h"
 
+#if !__has_feature(objc_arc)
+#error KVDB must be built with ARC.
+#endif
+
 typedef void(^KVBlock)(void);
 typedef void(^KVDictBlock)(NSDictionary *dict);
 
@@ -87,10 +91,6 @@ static KVDB *kvdbInstance = nil;
 
 - (void)dealloc {
     _file = nil;
-#if ! __has_feature(objc_arc)
-    [_file release];
-    [super dealloc];
-#endif
 }
 
 #pragma mark - DB Setup
@@ -271,18 +271,12 @@ static KVDB *kvdbInstance = nil;
 - (void)queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
     
     char *errMsg;
-#if __has_feature(objc_arc)
+
     int result = sqlite3_exec(db, [statement UTF8String], kvdbQueryCallback, (__bridge void *)(resultBlock), &errMsg);
-#else
-    int result = sqlite3_exec(db, [statement UTF8String], kvdbQueryCallback, resultBlock, &errMsg);
-#endif
 
     if (result != SQLITE_OK) {
-#if __has_feature(objc_arc)
         NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
-#else
-        NSString *errorMsg = [[[NSString alloc] initWithUTF8String:errMsg] autorelease];
-#endif
+
         
         sqlite3_free(errMsg);
         resultBlock([NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);    
@@ -305,11 +299,7 @@ static KVDB *kvdbInstance = nil;
     if (status != SQLITE_DONE) {
         const char* errMsg = sqlite3_errmsg(db);
         
-#if __has_feature(objc_arc)
         NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
-#else
-        NSString *errorMsg = [[[NSString alloc] initWithUTF8String:errMsg] autorelease];
-#endif
 
         resultBlock(NO, [NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);
     }
@@ -434,11 +424,7 @@ int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column) {
         if (value != nil) [row setObject:value forKey:columnName];
     }
 
-#if __has_feature(objc_arc)
     KVDictBlock objcBlk = (__bridge KVDictBlock)(resultBlock);
-#else
-    KVDictBlock objcBlk = resultBlock;
-#endif
 
     objcBlk(row);
     

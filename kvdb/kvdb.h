@@ -17,6 +17,10 @@
 - (void)createDatabase;
 - (void)dropDatabase;
 
+@end
+
+@interface KVDB (NSKeyValueCoding)
+
 - (void)setValue:(id)value forKey:(NSString *)key;
 - (void)removeValueForKey:(NSString *)key;
 - (id)valueForKey:(NSString *)key;
