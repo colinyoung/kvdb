@@ -3,15 +3,17 @@
 
 @interface KVDB : NSObject
 
-+ (id)sharedDB;
-+ (id)sharedDBUsingFile:(NSString *)file;
-+ (id)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory;
++ (instancetype)sharedDB;
++ (instancetype)sharedDBUsingFile:(NSString *)file;
++ (instancetype)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory;
 
-- (id)initWithSQLFile:(NSString *)sqliteFile;
-- (id)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory;
+- (instancetype)initWithSQLFile:(NSString *)sqliteFile;
+- (instancetype)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory;
 
 - (void)createDatabase;
 - (void)dropDatabase;
+
+- (void)performBlockAndWait:(void(^)(id DB))block;
 
 @end
 
