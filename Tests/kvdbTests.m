@@ -16,19 +16,9 @@
 
 @implementation kvdbTests
 
-- (void)setUp
-{
-    [super setUp];
-    
+- (void)setUp {
     [[KVDB sharedDB] dropDatabase];
-    [[KVDB sharedDB] createDatabase];
-}
-
-- (void)tearDown
-{
-    [super tearDown];
-    
-    [[KVDB sharedDB] dropDatabase];
+    [KVDB resetDB];
 }
 
 - (void)testCount {

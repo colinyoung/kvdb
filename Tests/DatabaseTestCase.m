@@ -20,10 +20,8 @@
 // All code under test is in the iOS Application
 
 - (void)setUp {
-    [super setUp];
-    
     [[KVDB sharedDB] dropDatabase];
-    [[KVDB sharedDB] createDatabase];
+    [KVDB resetDB];
 }
 
 - (void)testSerialization {
@@ -86,6 +84,21 @@
 
     STAssertTrue([KVDB sharedDB].isolatedAccessDatabase == NULL, nil);
     STAssertFalse([KVDB sharedDB].isAccessToDatabaseIsolated, nil);
+}
+
+- (void)testKVDBDataLivesBeetweenInstances {
+    NSString *testString = @"Test string is awesome.";
+    NSString *testKey = @"test_str_key";
+
+    [[KVDB sharedDB] setValue:testString forKey:testKey];
+
+    id obj = [[KVDB sharedDB] valueForKey:testKey];
+    STAssertEqualObjects(obj, testString, @"Serialized and deserialized objects are equal.");
+
+    [KVDB resetDB];
+
+    obj = [[KVDB sharedDB] valueForKey:testKey];
+    STAssertEqualObjects(obj, testString, @"Serialized and deserialized objects are equal.");
 }
 
 @end

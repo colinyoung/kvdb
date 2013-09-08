@@ -17,15 +17,13 @@
 
 @implementation FilesTestCase
 
-- (void)testAppDelegate {
-    id yourApplicationDelegate = [[UIApplication sharedApplication] delegate];
-    NSLog(@"Writing to application directory: %@", KVDocumentsDirectory());
-    STAssertNotNil(yourApplicationDelegate, @"UIApplication failed to find the AppDelegate");
+- (void)setUp {
+    [[KVDB sharedDB] dropDatabase];
+    [KVDB resetDB];
 }
 
 - (void)testFileName {
-    STAssertEqualObjects([[KVDB sharedDB] file], [KVDocumentsDirectory() stringByAppendingPathComponent:@"kvdb.sqlite3"],
-                   @"Test default filename is correct.");
+    STAssertEqualObjects([[KVDB sharedDB] file], [KVDocumentsDirectory() stringByAppendingPathComponent:@"kvdb.sqlite3"], @"Test default filename is correct.");
 }
 
 - (void)testFileCanBeCreated {

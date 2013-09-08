@@ -62,7 +62,7 @@ static KVDB *kvdbInstance = nil;
     self.isAccessToDatabaseIsolated = NO;
 
     NSLog(@"Initializing Shared DB with file: %@", self.file);
-    [self _createDBFile];
+    [self createDatabase];
 
     return self;
 }
@@ -87,7 +87,7 @@ static KVDB *kvdbInstance = nil;
             }
         }
     }
-    
+
     return kvdbInstance;
 }
 
@@ -103,23 +103,29 @@ static KVDB *kvdbInstance = nil;
     return kvdbInstance;
 }
 
++ (void)resetDB {
+    kvdbInstance = nil;
+}
+
 #pragma mark - Public API: Creating and dropping database
 
 - (void)createDatabase {
     sqlite3 *db = [self _openDatabase];
 
-    [self _queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB)", kKVDBTableName]];
-    
-    [self _ensureThatKVDBTableExistsInDB:db];
-    
+    [self _createKVDBTableIfNotExistsInDB:db];
+    [self _ensureKVDBTableExistsInDB:db];
+
     [self _closeDatabase:db];
 }
 
 - (void)dropDatabase {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
-    [[NSFileManager defaultManager] removeItemAtPath:self.file error:&error];
 
-    if (error) @throw KVDBExceptionWrite();
+    if ([fileManager fileExistsAtPath:self.file]) {
+        [fileManager removeItemAtPath:self.file error:&error];
+        if (error) @throw KVDBExceptionWrite();
+    }
 }
 
 #pragma mark - Public API: Isolated access to database
@@ -160,24 +166,24 @@ static KVDB *kvdbInstance = nil;
 
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
         [self _queryDatabase:database
-                  statement:[self _upsertQueryWithKey:key]
-                       data:[self archiveObject:value]
-                     result:^(BOOL success, NSDictionary *result) {
-                         // Null implementation, this could get slow.
-                     }];
+                   statement:[self _upsertQueryWithKey:key]
+                        data:[self archiveObject:value]
+                      result:^(BOOL success, NSDictionary *result) {
+                          // Null implementation, this could get slow.
+                      }];
     }];
 }
 
 - (id)valueForKey:(NSString *)key {
     __block NSDictionary *value;
-    
+
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
         NSArray *values = [self _queryDatabase:database statement:[self _selectQueryForKey:key]];
 
         if (values) value = [values objectAtIndex:0];
         if (value) value = [value objectForKey:@"value"];
     }];
-    
+
     return value;
 }
 
@@ -201,12 +207,12 @@ static KVDB *kvdbInstance = nil;
 
 - (NSArray *)allObjects {
     __block id value;
-    
+
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
         value = [self _queryDatabase:database statement:[NSString stringWithFormat:@"SELECT key, value FROM %@", kKVDBTableName]];
     }];
-    
-    return value;    
+
+    return value;
 }
 
 - (NSUInteger)count {
@@ -216,7 +222,7 @@ static KVDB *kvdbInstance = nil;
         NSArray *records;
 
         records = [self _queryDatabase:database statement:[NSString stringWithFormat:@"Select count(*) as value from %@", kKVDBTableName]];
-        
+
         if (records) {
             // TODO
 
@@ -228,18 +234,6 @@ static KVDB *kvdbInstance = nil;
 }
 
 #pragma mark - Private API
-
-- (void)_createDBFile {
-    NSFileManager *fm = [NSFileManager defaultManager];
-    NSError *error;
-
-    if ([fm fileExistsAtPath:self.file]) {
-        [fm removeItemAtPath:self.file error:&error];
-        if (error) @throw KVDBExceptionWrite();
-    }
-    
-    [self createDatabase];
-}
 
 - (void)_performAccessToDatabaseWithBlock:(void(^)(sqlite3 *database))databaseAccessBlock {
     sqlite3 *DB;
@@ -261,12 +255,12 @@ static KVDB *kvdbInstance = nil;
 
 - (sqlite3 *)_openDatabase {
     sqlite3 *db = NULL;
-    
+
     const char *dbpath = [self.file UTF8String];
     if (sqlite3_open(dbpath, &db) != SQLITE_OK) {
         @throw KVDBExceptionDBOpen();
     }
-    
+
     return db;
 }
 
@@ -279,33 +273,33 @@ static KVDB *kvdbInstance = nil;
     const char *sql = [statement UTF8String];
     const char *tail;
     sqlite3_stmt *stmt;
-    
+
     if ((sqlite3_prepare_v2(db, sql, -1, &stmt, &tail) != SQLITE_OK)) {
         return nil; /* No data found. */
     }
-    
+
     NSMutableArray *array = nil;
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         if (array == nil) array = [NSMutableArray array];
-        
+
         const char *keyText = (const char *)sqlite3_column_text(stmt, 0);
         if (keyText == nil) continue;
-        
+
         NSString *key = [NSString stringWithCString:keyText encoding:NSUTF8StringEncoding];
         NSData *blob = [NSData dataWithBytes:sqlite3_column_blob(stmt, 1) length:sqlite3_column_bytes(stmt, 1)];
 
         NSMutableDictionary *rowDict = [NSMutableDictionary dictionaryWithObject:key forKey:@"key"];
-                          
+
         if ([blob length]) {
             id value = [self unarchiveData:blob];
             [rowDict setObject:value forKey:@"value"];
         }
-        
+
         [array addObject:rowDict];
     }
-    
+
     sqlite3_finalize(stmt);
-    
+
     return array;
 }
 
@@ -325,47 +319,50 @@ static KVDB *kvdbInstance = nil;
 
 /* Writes blobs, so it uses transactions */
 - (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData *)data result:(void (^)(BOOL success, NSDictionary *))resultBlock {
-    
+
     // @todo this is totally inflexible to argument count
     const char *sql = [statement UTF8String];
     sqlite3_stmt *stmt;
-        
+
     if ((sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK)) {
         sqlite3_bind_blob(stmt, 1, [data bytes], [data length], SQLITE_STATIC);
     }
-    
+
     int status = sqlite3_step(stmt);
     if (status != SQLITE_DONE) {
-        const char* errMsg = sqlite3_errmsg(db);
-        
+        const char *errMsg = sqlite3_errmsg(db);
+
         NSString *errorMsg = [[NSString alloc] initWithUTF8String:errMsg];
 
         resultBlock(NO, [NSDictionary dictionaryWithObject:errorMsg forKey:@"error"]);
     }
-    
+
     sqlite3_finalize(stmt);
-    
+
     resultBlock(YES, [NSDictionary dictionaryWithObjectsAndKeys:
                       [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)], @"lastRowID",
-                        [NSNumber numberWithInt:sqlite3_changes(db)], @"rowsChanged"
+                      [NSNumber numberWithInt:sqlite3_changes(db)], @"rowsChanged"
                       , nil]);
 }
 
-- (void)_ensureThatKVDBTableExistsInDB:(sqlite3 *)db {
-    [self _queryDatabase:db
-              statement:@"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;"
-                 result:^(NSDictionary *result) {
-                     if ([[result objectForKey:@"name"] isEqualToString:kKVDBTableName] == NO)
-                         @throw [NSException exceptionWithName:@"SQLITEError"
-                                                        reason:[NSString stringWithFormat:@"There should have been a table called %@.", kKVDBTableName]
-                                                      userInfo:nil];
+- (void)_createKVDBTableIfNotExistsInDB:(sqlite3 *)db {
+    [self _queryDatabase:db statement:[NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ (key TEXT PRIMARY KEY, value BLOB)", kKVDBTableName]];
+}
+
+- (void)_ensureKVDBTableExistsInDB:(sqlite3 *)db {
+    NSString *statement = @"SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;";
+
+    [self _queryDatabase:db statement:statement result:^(NSDictionary *result) {
+        if ([[result objectForKey:@"name"] isEqualToString:kKVDBTableName] == NO) {
+            @throw [NSException exceptionWithName:@"SQLITEError" reason:[NSString stringWithFormat:@"There should have been a table called %@.", kKVDBTableName] userInfo:nil];
+        }
     }];
 }
 
 #pragma mark - Data/query methods
 
-/* Upsert via SO contributor Eric B; 
-    Updates or inserts safely.
+/* Upsert via SO contributor Eric B;
+ Updates or inserts safely.
  http://stackoverflow.com/questions/418898/sqlite-upsert-not-insert-or-replace/4253806#4253806
  */
 - (NSString *)_upsertQueryWithKey:(NSString *)key {
@@ -389,15 +386,15 @@ static KVDB *kvdbInstance = nil;
     if (*blob != NULL) {
         @throw [NSException exceptionWithName:@"SQLITEError" reason:@"Can only write to NULL blobs." userInfo:nil];
     }
-    
+
     // Opening the blob with no data
     sqlite3_blob_open(DB, NULL, NULL, NULL, 0, 1 /* Open for writing */, blob);
-    
+
     // Objects must conform to NSCoding since we are using NSKeyedArchiver for data serialization.
     if (![objC conformsToProtocol:@protocol(NSCoding)]) {
         @throw KVDBExceptionNoCoding(objC);
     }
-    
+
     NSData *data = [self archiveObject:objC];
     int byteCt = [data length];
     Byte *byteData = (Byte*)malloc(byteCt);
@@ -411,16 +408,16 @@ static KVDB *kvdbInstance = nil;
     if (*blob != NULL) {
         @throw [NSException exceptionWithName:@"SQLITEError" reason:@"Can only read to NULL blobs." userInfo:nil];
     }
-    
+
     int status = sqlite3_blob_open([self _openDatabase], [dbName UTF8String], [tableName UTF8String], [columnName UTF8String], rowID, 0 /* Open for reading */, blob);
 
     if (status != SQLITE_OK) {
         @throw KVDBExceptionDBRead();
     }
-    
+
     int byteCt = sqlite3_blob_bytes(*blob);
     Byte byteBuff[byteCt];
-    
+
     return [NSData dataWithBytes:byteBuff length:byteCt];
 }
 
@@ -430,7 +427,7 @@ static KVDB *kvdbInstance = nil;
 
 - (id)unarchiveData:(NSData *)data {
     if (data == nil) return nil;
-    
+
     return [NSKeyedUnarchiver unarchiveObjectWithData:data];
 }
 
@@ -454,10 +451,10 @@ int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column) {
             sqlite3_blob *blob = NULL;
 
             NSData *data = [[KVDB sharedDB] _readBlobFromDatabaseNamed:@"main"
-                             tableName:kKVDBTableName
-                            columnName:@"value"
-                                 rowID:rowID
-                                  blob:&blob];
+                                                             tableName:kKVDBTableName
+                                                            columnName:@"value"
+                                                                 rowID:rowID
+                                                                  blob:&blob];
 
             // Revive object from NSKeyedArchiver
             if (data != nil)
@@ -466,9 +463,9 @@ int kvdbQueryCallback(void *resultBlock, int argc, char **argv, char **column) {
         
         if (value != nil) [row setObject:value forKey:columnName];
     }
-
+    
     KVDictBlock objcBlk = (__bridge KVDictBlock)(resultBlock);
-
+    
     objcBlk(row);
     
     return 0;

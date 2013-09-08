@@ -17,13 +17,15 @@
 
 @property (nonatomic, retain) NSString *file;
 
-- (void)_createDBFile;
+
 - (sqlite3 *)_openDatabase;
 - (void)_closeDatabase:(sqlite3 *)db;
 - (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement;
 - (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
 - (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
-- (void)_ensureThatKVDBTableExistsInDB:(sqlite3 *)db;
+
+- (void)_createKVDBTableIfNotExistsInDB:(sqlite3 *)db;
+- (void)_ensureKVDBTableExistsInDB:(sqlite3 *)db;
 
 - (NSString *)_upsertQueryWithKey:(NSString *)key;
 - (NSString *)_selectQueryForKey:(NSString *)key;

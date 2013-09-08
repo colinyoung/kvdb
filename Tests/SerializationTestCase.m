@@ -17,14 +17,11 @@
 @implementation SerializationTestCase
 
 - (void)setUp {
-    [super setUp];
-    
     [[KVDB sharedDB] dropDatabase];
-    [[KVDB sharedDB] createDatabase];
+    [KVDB resetDB];
 }
 
-- (void)testSerialization
-{
+- (void)testSerialization {
     NSString *testString = @"Test string is awesome.";
     NSString *testKey = @"test_str_key";
     [[KVDB sharedDB] setValue:testString forKey:testKey];

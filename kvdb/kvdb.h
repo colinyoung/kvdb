@@ -6,6 +6,7 @@
 + (instancetype)sharedDB;
 + (instancetype)sharedDBUsingFile:(NSString *)file;
 + (instancetype)sharedDBUsingFile:(NSString *)file inDirectory:(NSString *)directory;
++ (void)resetDB;
 
 - (instancetype)initWithSQLFile:(NSString *)sqliteFile;
 - (instancetype)initWithSQLFile:(NSString *)sqliteFile inDirectory:(NSString *)directory;
