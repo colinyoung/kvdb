@@ -31,7 +31,7 @@
 - (NSString *)_selectQueryForKey:(NSString *)key;
 - (NSString *)_deleteQueryForKey:(NSString *)key;
 - (void)_writeObject:(id)objC inDatabase:(sqlite3 *)DB toBlob:(sqlite3_blob **)blob;
-- (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob **)blob;
+- (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(sqlite3_int64)rowID blob:(sqlite3_blob **)blob;
 
 - (NSData*)archiveObject:(id)object;
 - (id)unarchiveData:(NSData*)data;

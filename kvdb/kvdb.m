@@ -340,7 +340,7 @@ static KVDB *kvdbInstance = nil;
     sqlite3_finalize(stmt);
 
     resultBlock(YES, [NSDictionary dictionaryWithObjectsAndKeys:
-                      [NSNumber numberWithInt:sqlite3_last_insert_rowid(db)], @"lastRowID",
+                      [NSNumber numberWithLongLong:sqlite3_last_insert_rowid(db)], @"lastRowID",
                       [NSNumber numberWithInt:sqlite3_changes(db)], @"rowsChanged"
                       , nil]);
 }
@@ -404,7 +404,7 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Call this function with a sqlite3_blob * initialized to NULL. */
-- (NSData *)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(NSUInteger)rowID blob:(sqlite3_blob**)blob {
+- (NSData *)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(sqlite3_int64)rowID blob:(sqlite3_blob **)blob {
     if (*blob != NULL) {
         @throw [NSException exceptionWithName:@"SQLITEError" reason:@"Can only read to NULL blobs." userInfo:nil];
     }
