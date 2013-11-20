@@ -79,7 +79,7 @@ and this nice [NSHipster article about nil and NSNull](http://nshipster.com/nil/
 
 ## Notes
 
-* `kvdb` is a simple `key value store for iOS` solution with codebase containing just a couple of files. Don't ask it what it is not intended for. For more serious solutions see "Similar tools".
+* `kvdb` is a simple `key value store for iOS` solution with codebase containing just a couple of files. Don't ask it what it is not intended for: it is not thread-safe, it does not support transactions and so on. For more serious solutions see "Similar tools".
 * `kvdb` plays very nice with all the solutions like [Mantle](https://github.com/github/Mantle), which provide auto-coding for all the properties you declare in your classes. For example, if using `Mantle`: create a `MTLModel` subclass, declare its properties, and... it is ready to be stored in a KVDB store, because `Mantle` has already autocoded these properties for you.
 
 ## Similar tools
