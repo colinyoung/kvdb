@@ -62,9 +62,9 @@ To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` deni
 
 `[KVDB setObject:forKey:]` raises an NSInvalidArgumentException if aKey is nil.
 
-Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want to use `-[KVDB setValue:forKey]` provide a given key with a null value.
+Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want `-[KVDB setValue:forKey]` to provide a given key with a null value:
 
-So use
+Use
 
 ```objective-c
 [[KVDB sharedDB] setValue:[NSNull null] forKey:@"fruit"];
