@@ -10,13 +10,9 @@
 
 @interface KVDB ()
 
-@property (nonatomic) dispatch_queue_t isolationQueue;
-@property BOOL isAccessToDatabaseIsolated;
-@property sqlite3 *isolatedAccessDatabase;
 - (void)_performAccessToDatabaseWithBlock:(void(^)(sqlite3 *database))databaseAccessBlock;
 
 @property (nonatomic, retain) NSString *file;
-
 
 - (sqlite3 *)_openDatabase;
 - (void)_closeDatabase:(sqlite3 *)db;

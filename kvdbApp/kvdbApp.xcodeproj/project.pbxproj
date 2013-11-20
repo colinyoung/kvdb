@@ -443,6 +443,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "kvdbApp/kvdbApp-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				INFOPLIST_FILE = "kvdbApp/kvdbApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -454,6 +455,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "kvdbApp/kvdbApp-Prefix.pch";
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				INFOPLIST_FILE = "kvdbApp/kvdbApp-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;

@@ -27,19 +27,6 @@ static KVDB *kvdbInstance = nil;
 
 - (void)dealloc {
     self.file = nil;
-    self.isolationQueue = nil;
-}
-
-- (void)setIsolationQueue:(dispatch_queue_t)isolationQueue {
-#if !OS_OBJECT_USE_OBJC
-    if (_isolationQueue) dispatch_release(_isolationQueue);
-
-    if (isolationQueue) {
-        dispatch_retain(isolationQueue);
-    }
-#endif
-
-    _isolationQueue = isolationQueue;
 }
 
 #pragma mark - Public API: Initialization
@@ -58,8 +45,6 @@ static KVDB *kvdbInstance = nil;
     if (self == nil) return nil;
 
     self.file = [directory stringByAppendingPathComponent:sqliteFile];
-    self.isolationQueue = dispatch_queue_create("com.queue.kvdb", DISPATCH_QUEUE_SERIAL);
-    self.isAccessToDatabaseIsolated = NO;
 
     NSLog(@"Initializing Shared DB with file: %@", self.file);
     [self createDatabase];
@@ -126,34 +111,6 @@ static KVDB *kvdbInstance = nil;
         [fileManager removeItemAtPath:self.file error:&error];
         if (error) @throw KVDBExceptionWrite();
     }
-}
-
-#pragma mark - Public API: Isolated access to database
-
-- (void)performBlock:(void(^)(id DB))block {
-    dispatch_async(self.isolationQueue, ^{
-        self.isolatedAccessDatabase = [self _openDatabase];
-        self.isAccessToDatabaseIsolated = YES;
-
-        block(self);
-
-        self.isAccessToDatabaseIsolated = NO;
-        [self _closeDatabase:self.isolatedAccessDatabase];
-        self.isolatedAccessDatabase = nil;
-    });
-}
-
-- (void)performBlockAndWait:(void(^)(id DB))block {
-    dispatch_sync(self.isolationQueue, ^{
-        self.isolatedAccessDatabase = [self _openDatabase];
-        self.isAccessToDatabaseIsolated = YES;
-
-        block(self);
-
-        self.isAccessToDatabaseIsolated = NO;
-        [self _closeDatabase:self.isolatedAccessDatabase];
-        self.isolatedAccessDatabase = nil;
-    });
 }
 
 #pragma mark - Public API: NSKeyValueCoding
@@ -236,19 +193,11 @@ static KVDB *kvdbInstance = nil;
 #pragma mark - Private API
 
 - (void)_performAccessToDatabaseWithBlock:(void(^)(sqlite3 *database))databaseAccessBlock {
-    sqlite3 *DB;
-
-    if (self.isAccessToDatabaseIsolated) {
-        DB = self.isolatedAccessDatabase;
-    } else {
-        DB = [self _openDatabase];
-    }
+    sqlite3 *DB = [self _openDatabase];
 
     databaseAccessBlock(DB);
 
-    if (self.isAccessToDatabaseIsolated == NO) {
-        [self _closeDatabase:DB];
-    }
+    [self _closeDatabase:DB];
 }
 
 #pragma mark - Private API: SQLITE methods

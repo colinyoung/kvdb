@@ -59,33 +59,6 @@
     STAssertTrue([nullValue isEqual:dbNullValue], nil);
 }
 
-- (void)testPerformBlockAndWait {
-    NSString *testString = @"Test string is awesome.";
-    NSString *testKey = @"test_str_key";
-
-    STAssertTrue([KVDB sharedDB].isolatedAccessDatabase == NULL, nil);
-    STAssertFalse([KVDB sharedDB].isAccessToDatabaseIsolated, nil);
-
-    [[KVDB sharedDB] performBlockAndWait:^(KVDB *DB) {
-        STAssertTrue([KVDB sharedDB].isolatedAccessDatabase != NULL, nil);
-        STAssertTrue([KVDB sharedDB].isAccessToDatabaseIsolated, nil);
-
-        [DB setValue:testString forKey:testKey];
-
-        id obj = [DB valueForKey:testKey];
-        STAssertEqualObjects(obj, testString, @"Serialized and deserialized objects are equal.");
-
-        [DB removeValueForKey:testKey];
-
-        obj = [DB valueForKey:testKey];
-
-        STAssertNil(obj, @"Key is removed.");
-    }];
-
-    STAssertTrue([KVDB sharedDB].isolatedAccessDatabase == NULL, nil);
-    STAssertFalse([KVDB sharedDB].isAccessToDatabaseIsolated, nil);
-}
-
 - (void)testKVDBDataLivesBeetweenInstances {
     NSString *testString = @"Test string is awesome.";
     NSString *testKey = @"test_str_key";
