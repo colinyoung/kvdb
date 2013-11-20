@@ -56,7 +56,13 @@ or you can just clone `kvdb` and add `kvdb/` folder to your project.
 
 ## Coding nil-values: nil vs NSNull
 
-To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` denies the coding of `nil` values. Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want to use `-[KVDB setValue:forKey]` provide a given key with a null value.
+To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` denies the coding of `nil` values. `KVDB` follows the same policy as NSDictionary class does: 
+
+`-[KVDB setValue:forKey:]` - if value is nil then method attempts to remove key using removeValueForKey:.
+
+`[KVDB setObject:forKey:]` raises an NSInvalidArgumentException if aKey is nil.
+
+Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want to use `-[KVDB setValue:forKey]` provide a given key with a null value.
 
 So use
 
@@ -71,11 +77,15 @@ NSLog(@"%@", dbValue); // will print "<null>" i.e.  NSNull singleton
 Instead of
 
 ```objective-c
-[[KVDB sharedDB] setValue:nil forKey:@"fruit"]; // => Results in NSInternalInconsistencyException
+[[KVDB sharedDB] setObject:nil forKey:@"fruit"]; // => Results in NSInvalidArgumentException
+```
+or 
+
+```objective-c
+[[KVDB sharedDB] setValue:nil forKey:@"fruit"]; // => Results in removeValueForKey: behavior 
 ```
 
-See [the documentation of -[NSDictionary setObject:forKey:]](https://developer.apple.com/library/ios/documentation/cocoa/reference/foundation/Classes/NSMutableDictionary_Class/Reference/Reference.html#//apple_ref/occ/instm/NSMutableDictionary/setObject:forKey:)
-and this nice [NSHipster article about nil and NSNull](http://nshipster.com/nil/).
+See [the documentation of -[NSDictionary setObject:forKey:]](https://developer.apple.com/library/ios/documentation/cocoa/reference/foundation/Classes/NSMutableDictionary_Class/Reference/Reference.html#//apple_ref/occ/instm/NSMutableDictionary/setObject:forKey:) and this nice [NSHipster article about nil and NSNull](http://nshipster.com/nil/).
 
 ## Notes
 

@@ -117,8 +117,8 @@ static KVDB *kvdbInstance = nil;
 
 - (void)setValue:(id)value forKey:(NSString *)key {
     if (value == nil) {
-        NSString *reasonString = [NSString stringWithFormat:@"%s : value cannot be nil - use NSNull instead!", __PRETTY_FUNCTION__];
-        @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reasonString userInfo:nil];
+        [self removeValueForKey:key];
+        return;
     }
 
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
@@ -151,6 +151,11 @@ static KVDB *kvdbInstance = nil;
 }
 
 - (void)setObject:(id)object forKey:(NSString *)key {
+    if (object == nil) {
+        NSString *reasonString = [NSString stringWithFormat:@"%s : value cannot be nil - use NSNull instead!", __PRETTY_FUNCTION__];
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:reasonString userInfo:nil];
+    }
+
     [self setValue:object forKey:key];
 }
 

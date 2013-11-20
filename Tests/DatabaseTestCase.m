@@ -39,12 +39,27 @@
     STAssertNil(obj, @"Key is removed.");
 }
 
-- (void)testSettingAndGettingNilValueForAGivenKey {
+- (void)testSettingNilValueForAGivenKeyUsingSetObjectForKey {
     NSString *testKey = @"test_str_key";
 
     STAssertThrowsSpecificNamed(^{
-        [[KVDB sharedDB] setValue:nil forKey:testKey];
-    }(), NSException, NSInternalInconsistencyException, nil);
+        [[KVDB sharedDB] setObject:nil forKey:testKey];
+    }(), NSException, NSInvalidArgumentException, nil);
+}
+
+- (void)testSettingNilValueForAGivenKeyUsingSetValueForKey {
+    NSString *testKey = @"test_str_key";
+    NSString *testString = @"Test string is awesome.";
+
+    [[KVDB sharedDB] setValue:testString forKey:testKey];
+
+    id dbValue = [[KVDB sharedDB] valueForKey:testKey];
+    STAssertTrue([dbValue isEqual:testString], nil);
+
+    [[KVDB sharedDB] setValue:nil forKey:testKey];
+    dbValue = [[KVDB sharedDB] valueForKey:testKey];
+
+    STAssertNil(dbValue, nil);
 }
 
 - (void)testSettingAndGettingNSNullValueForAGivenKey {
