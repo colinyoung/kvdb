@@ -60,7 +60,7 @@ To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` deni
 
 `-[KVDB setValue:forKey:]` - if value is nil then method attempts to remove key using removeValueForKey:.
 
-`[KVDB setObject:forKey:]` raises an NSInvalidArgumentException if aKey is nil.
+`-[KVDB setObject:forKey:]` - raises an NSInvalidArgumentException if aKey is nil.
 
 Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want `-[KVDB setValue:forKey]` to provide a given key with a null value:
 
