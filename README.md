@@ -21,7 +21,7 @@ etc.
 [[KVDB sharedDB] setValue:@"apple" forKey:@"fruit"];
 [[KVDB sharedDB] setValue:@"Chicago" forKey:@"city"];
 
-MyObject *object = [[MyObject alloc] initWithTitle:@"KVDB"]
+MyObject *object = [[MyObject alloc] initWithTitle:@"KVDB"];
 [[KVDB sharedDB] setValue:object forKey:@"my_object"];
 ```
 
@@ -46,12 +46,12 @@ or you can just clone `kvdb` and add `kvdb/` folder to your project.
 ## Other stuff
 
 ```objective-c
-[[KVDB sharedDB] dropDatabase]
+[[KVDB sharedDB] dropDatabase];
 
-[[KVDB sharedDB] createDatabase]
+[[KVDB sharedDB] createDatabase];
 
 // Instantiate w/ a different file:
-[KVDB sharedDBWithFile:@"blah.sqlite3"] // the file will be created in your documents directory.
+[KVDB sharedDBWithFile:@"blah.sqlite3"]; // the file will be created in your documents directory.
 ```
 
 ## Coding nil-values: nil vs NSNull
