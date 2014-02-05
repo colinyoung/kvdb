@@ -6,7 +6,7 @@
 //  Copyright (c) 2013 Stanislaw Pankevich. All rights reserved.
 //
 
-#import "KVDB.h"
+#import "kvdb.h"
 
 @interface KVDB ()
 

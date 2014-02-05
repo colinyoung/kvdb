@@ -8,7 +8,7 @@
 
 #import <SenTestingKit/SenTestingKit.h>
 
-#import "KVDB.h"
+#import "kvdb.h"
 #import "KVDB_Private.h"
 #import "KVDBFunctions.h"
 

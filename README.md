@@ -16,7 +16,7 @@ etc.
 ## Usage
 
 ```objective-c
-#import "KVDB.h"
+#import "kvdb.h"
 
 [[KVDB sharedDB] setValue:@"apple" forKey:@"fruit"];
 [[KVDB sharedDB] setValue:@"Chicago" forKey:@"city"];
