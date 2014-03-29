@@ -16,12 +16,12 @@ etc.
 ## Usage
 
 ```objective-c
-#import "KVDB.h"
+#import "kvdb.h"
 
 [[KVDB sharedDB] setValue:@"apple" forKey:@"fruit"];
 [[KVDB sharedDB] setValue:@"Chicago" forKey:@"city"];
 
-MyObject *object = [[MyObject alloc] initWithTitle:@"KVDB"]
+MyObject *object = [[MyObject alloc] initWithTitle:@"KVDB"];
 [[KVDB sharedDB] setValue:object forKey:@"my_object"];
 ```
 
@@ -46,12 +46,12 @@ or you can just clone `kvdb` and add `kvdb/` folder to your project.
 ## Other stuff
 
 ```objective-c
-[[KVDB sharedDB] dropDatabase]
+[[KVDB sharedDB] dropDatabase];
 
-[[KVDB sharedDB] createDatabase]
+[[KVDB sharedDB] createDatabase];
 
 // Instantiate w/ a different file:
-[KVDB sharedDBWithFile:@"blah.sqlite3"] // the file will be created in your documents directory.
+[KVDB sharedDBWithFile:@"blah.sqlite3"]; // the file will be created in your documents directory.
 ```
 
 ## Coding nil-values: nil vs NSNull
@@ -60,7 +60,7 @@ To provide a compatibility with `NSArray` and `NSDictionary` classes `KVDB` deni
 
 `-[KVDB setValue:forKey:]` - if value is nil then method attempts to remove key using removeValueForKey:.
 
-`[KVDB setObject:forKey:]` raises an NSInvalidArgumentException if aKey is nil.
+`-[KVDB setObject:forKey:]` - raises an NSInvalidArgumentException if aKey is nil.
 
 Like it is done when working with instances of NSArray or NSDictionary use `NSNull` class whereever you want `-[KVDB setValue:forKey]` to provide a given key with a null value:
 

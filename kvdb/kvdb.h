@@ -1,6 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>
 
+__attribute__((__visibility__("default")))
 @interface KVDB : NSObject
 
 + (instancetype)sharedDB;

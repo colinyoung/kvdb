@@ -9,7 +9,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 #import <UIKit/UIKit.h>
-#import "KVDB.h"
+#import "kvdb.h"
 #import "KVDB_Private.h"
 
 @interface DatabaseTestCase : SenTestCase

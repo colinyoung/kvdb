@@ -9,7 +9,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 
 #import <UIKit/UIKit.h>
-#import "KVDB.h"
+#import "kvdb.h"
 
 @interface SerializationTestCase : SenTestCase
 @end

@@ -1,4 +1,4 @@
-#import "KVDB.h"
+#import "kvdb.h"
 #import "KVDB_Private.h"
 
 #import "KVDBFunctions.h"
@@ -45,8 +45,6 @@ static KVDB *kvdbInstance = nil;
     if (self == nil) return nil;
 
     self.file = [directory stringByAppendingPathComponent:sqliteFile];
-
-    NSLog(@"Initializing Shared DB with file: %@", self.file);
     [self createDatabase];
 
     return self;
