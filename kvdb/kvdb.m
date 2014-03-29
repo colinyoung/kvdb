@@ -277,7 +277,7 @@ static KVDB *kvdbInstance = nil;
     sqlite3_stmt *stmt;
 
     if ((sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK)) {
-        sqlite3_bind_blob(stmt, 1, [data bytes], [data length], SQLITE_STATIC);
+        sqlite3_bind_blob(stmt, 1, [data bytes], (int)[data length], SQLITE_STATIC);
     }
 
     int status = sqlite3_step(stmt);
@@ -348,10 +348,14 @@ static KVDB *kvdbInstance = nil;
     }
 
     NSData *data = [self archiveObject:objC];
-    int byteCt = [data length];
-    Byte *byteData = (Byte*)malloc(byteCt);
+
+    NSUInteger byteCt = [data length];
+
+    Byte *byteData = (Byte *)malloc(byteCt);
+
     memcpy(byteData, [data bytes], byteCt);
-    sqlite3_blob_write(*blob, byteData, byteCt, 0);
+    sqlite3_blob_write(*blob, byteData, (int)byteCt, 0);
+
     free(byteData);
 }
 
