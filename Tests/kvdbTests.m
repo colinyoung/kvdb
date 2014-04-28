@@ -25,13 +25,23 @@
     KVDB *DB = [KVDB sharedDB];
     STAssertEquals((int)DB.count, 0, nil);
 
-    NSString *testString = @"Test string is awesome.";
-    NSString *testKey = @"test_str_key";
-    [DB setValue:testString forKey:testKey];
+    int N = 10;
 
-    STAssertEquals((int)DB.count, 1, nil);
-    
-    [DB removeValueForKey:testKey];
+    for (int i = 1; i < N; i++) {
+        NSString *testString = @"Test string is awesome.";
+        NSString *testKey = [NSString stringWithFormat:@"test_str_key#%d", i];
+        [DB setValue:testString forKey:testKey];
+
+        STAssertEquals((int)DB.count, i, nil);
+    }
+
+    for (int i = N; i > 0; i--) {
+        NSString *testKey = [NSString stringWithFormat:@"test_str_key#%d", i];
+
+        [DB removeValueForKey:testKey];
+
+        STAssertEquals((int)DB.count, (i - 1), nil);
+    }
 
     STAssertEquals((int)DB.count, 0, nil);
 }
