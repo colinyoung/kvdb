@@ -1,3 +1,7 @@
+### Warning: this package is not actively supported. ###
+
+You may prefer to use something newer like [Couchbase Lite](http://www.couchbase.com/autodocs/couchbase-lite-ios-1.0b3/annotated.html), which is excellent and is widely supported. This package was made long before NoSQL was really available on iPhone.
+
 # kvdb
 
 **kvdb** is a key-value store for iOS backed by SQLite3.
