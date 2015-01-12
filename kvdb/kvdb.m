@@ -121,7 +121,8 @@ static KVDB *kvdbInstance = nil;
 
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
         [self _queryDatabase:database
-                   statement:[self _upsertQueryWithKey:key]
+                   statement:[self _upsertKeyQuery]
+                         key:key
                         data:[self archiveObject:value]
                       result:^(BOOL success, NSDictionary *result) {
                           // Null implementation, this could get slow.
@@ -133,7 +134,7 @@ static KVDB *kvdbInstance = nil;
     __block NSDictionary *value;
 
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
-        NSArray *values = [self _queryDatabase:database statement:[self _selectQueryForKey:key]];
+        NSArray *values = [self _queryDatabase:database statement:[self _selectKeyQuery] key:key];
 
         if (values) value = [values objectAtIndex:0];
         if (value) value = [value objectForKey:@"value"];
@@ -144,7 +145,7 @@ static KVDB *kvdbInstance = nil;
 
 - (void)removeValueForKey:(NSString *)key {
     [self _performAccessToDatabaseWithBlock:^(sqlite3 *database) {
-        [self _queryDatabase:database statement:[self _deleteQueryForKey:key]];
+        [self _queryDatabase:database statement:[self _deleteKeyQuery] key:key];
     }];
 }
 
@@ -221,13 +222,17 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Returns an array of rows */
-- (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
+- (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement key:(NSString *)key {
     const char *sql = [statement UTF8String];
     const char *tail;
     sqlite3_stmt *stmt;
 
     if ((sqlite3_prepare_v2(db, sql, -1, &stmt, &tail) != SQLITE_OK)) {
         return nil; /* No data found. */
+    }
+
+    if (key) {
+        sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_STATIC);
     }
 
     NSMutableArray *array = nil;
@@ -255,6 +260,10 @@ static KVDB *kvdbInstance = nil;
     return array;
 }
 
+- (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement {
+    return [self _queryDatabase:db statement:statement key:nil];
+}
+
 /* Doesn't use blobs, so simply queries. */
 - (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock {
     char *errMsg;
@@ -270,14 +279,15 @@ static KVDB *kvdbInstance = nil;
 }
 
 /* Writes blobs, so it uses transactions */
-- (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData *)data result:(void (^)(BOOL success, NSDictionary *))resultBlock {
+- (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement key:(NSString *)key data:(NSData *)data result:(void (^)(BOOL success, NSDictionary *))resultBlock {
 
     // @todo this is totally inflexible to argument count
     const char *sql = [statement UTF8String];
     sqlite3_stmt *stmt;
 
     if ((sqlite3_prepare_v2(db, sql, -1, &stmt, NULL) == SQLITE_OK)) {
-        sqlite3_bind_blob(stmt, 1, [data bytes], (int)[data length], SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, [key UTF8String], -1, SQLITE_STATIC);
+        sqlite3_bind_blob(stmt, 2, [data bytes], (int)[data length], SQLITE_STATIC);
     }
 
     int status = sqlite3_step(stmt);
@@ -317,18 +327,18 @@ static KVDB *kvdbInstance = nil;
  Updates or inserts safely.
  http://stackoverflow.com/questions/418898/sqlite-upsert-not-insert-or-replace/4253806#4253806
  */
-- (NSString *)_upsertQueryWithKey:(NSString *)key {
+- (NSString *)_upsertKeyQuery {
     return [NSString stringWithFormat:@"INSERT OR REPLACE INTO `%@` (`key`,`value`)" // table
-            "VALUES ( '%@', ?); COMMIT;",
-            kKVDBTableName, key];
+            "VALUES ( ?, ?); COMMIT;",
+            kKVDBTableName];
 }
 
-- (NSString *)_selectQueryForKey:(NSString *)key {
-    return [NSString stringWithFormat:@"SELECT key, value FROM %@ WHERE key='%@'", kKVDBTableName, key];
+- (NSString *)_selectKeyQuery {
+    return [NSString stringWithFormat:@"SELECT key, value FROM %@ WHERE key= ?", kKVDBTableName];
 }
 
-- (NSString *)_deleteQueryForKey:(NSString *)key {
-    return [NSString stringWithFormat:@"DELETE FROM %@ WHERE key='%@'", kKVDBTableName, key];
+- (NSString *)_deleteKeyQuery {
+    return [NSString stringWithFormat:@"DELETE FROM %@ WHERE key= ?", kKVDBTableName];
 }
 
 
