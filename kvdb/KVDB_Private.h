@@ -16,16 +16,17 @@
 
 - (sqlite3 *)_openDatabase;
 - (void)_closeDatabase:(sqlite3 *)db;
+- (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement key:(NSString *)key;
 - (NSArray *)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement;
 - (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement result:(void (^)(NSDictionary *))resultBlock;
-- (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
+- (void)_queryDatabase:(sqlite3 *)db statement:(NSString *)statement key:(NSString *)key data:(NSData*)data result:(void (^)(BOOL success, NSDictionary * result))resultBlock;
 
 - (void)_createKVDBTableIfNotExistsInDB:(sqlite3 *)db;
 - (void)_ensureKVDBTableExistsInDB:(sqlite3 *)db;
 
-- (NSString *)_upsertQueryWithKey:(NSString *)key;
-- (NSString *)_selectQueryForKey:(NSString *)key;
-- (NSString *)_deleteQueryForKey:(NSString *)key;
+- (NSString *)_upsertKeyQuery;
+- (NSString *)_selectKeyQuery;
+- (NSString *)_deleteKeyQuery;
 - (void)_writeObject:(id)objC inDatabase:(sqlite3 *)DB toBlob:(sqlite3_blob **)blob;
 - (NSData*)_readBlobFromDatabaseNamed:(NSString *)dbName tableName:(NSString *)tableName columnName:(NSString *)columnName rowID:(sqlite3_int64)rowID blob:(sqlite3_blob **)blob;
 
