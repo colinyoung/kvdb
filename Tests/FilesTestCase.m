@@ -6,13 +6,13 @@
 //  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
-#import <SenTestingKit/SenTestingKit.h>
+#import <XCTest/XCTest.h>
 
 #import "kvdb.h"
 #import "KVDB_Private.h"
 #import "KVDBFunctions.h"
 
-@interface FilesTestCase : SenTestCase
+@interface FilesTestCase : XCTestCase
 @end
 
 @implementation FilesTestCase
@@ -23,19 +23,19 @@
 }
 
 - (void)testFileName {
-    STAssertEqualObjects([[KVDB sharedDB] file], [KVDocumentsDirectory() stringByAppendingPathComponent:@"kvdb.sqlite3"], @"Test default filename is correct.");
+    XCTAssertEqualObjects([[KVDB sharedDB] file], [KVDocumentsDirectory() stringByAppendingPathComponent:@"kvdb.sqlite3"], @"Test default filename is correct.");
 }
 
 - (void)testFileCanBeCreated {
     NSFileManager *fm = [NSFileManager defaultManager];
-    STAssertTrue([fm fileExistsAtPath:[[KVDB sharedDB] file]], @"File created and exists");
+    XCTAssertTrue([fm fileExistsAtPath:[[KVDB sharedDB] file]], @"File created and exists");
 }
 
 - (void)testSharedDBUsingFileInDirectory {
     NSString *file = @"kvdb.sqlite3";
     NSString *directory = KVDocumentsDirectory();
     
-    STAssertEqualObjects([[KVDB sharedDBUsingFile:file inDirectory:directory] file], [directory stringByAppendingPathComponent:file], nil);
+    XCTAssertEqualObjects([[KVDB sharedDBUsingFile:file inDirectory:directory] file], [directory stringByAppendingPathComponent:file]);
 }
 
 @end

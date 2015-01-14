@@ -19,15 +19,12 @@
 		86C5B902175CAF2100E7BC09 /* MainStoryboard_iPhone.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86C5B900175CAF2100E7BC09 /* MainStoryboard_iPhone.storyboard */; };
 		86C5B905175CAF2200E7BC09 /* MainStoryboard_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86C5B903175CAF2200E7BC09 /* MainStoryboard_iPad.storyboard */; };
 		86C5B908175CAF2200E7BC09 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B907175CAF2200E7BC09 /* ViewController.m */; };
-		86C5B910175CAF2200E7BC09 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B90F175CAF2200E7BC09 /* SenTestingKit.framework */; };
 		86C5B911175CAF2200E7BC09 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B8E8175CAF2100E7BC09 /* UIKit.framework */; };
 		86C5B912175CAF2200E7BC09 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B8EA175CAF2100E7BC09 /* Foundation.framework */; };
 		86C5B91A175CAF2200E7BC09 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86C5B918175CAF2200E7BC09 /* InfoPlist.strings */; };
 		86C5B92B175CAF3A00E7BC09 /* kvdb.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B928175CAF3A00E7BC09 /* kvdb.m */; };
-		86C5B936175CAF4600E7BC09 /* DatabaseTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */; };
+		86C5B936175CAF4600E7BC09 /* kvdbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B92F175CAF4600E7BC09 /* kvdbTests.m */; };
 		86C5B937175CAF4600E7BC09 /* FilesTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B931175CAF4600E7BC09 /* FilesTestCase.m */; };
-		86C5B938175CAF4600E7BC09 /* kvdbTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B933175CAF4600E7BC09 /* kvdbTests.m */; };
-		86C5B939175CAF4600E7BC09 /* SerializationTestCase.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */; };
 		86C5B93A175CB0CD00E7BC09 /* KVDBFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */; };
 		86C5B93C175CB0F500E7BC09 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */; };
 /* End PBXBuildFile section */
@@ -60,18 +57,15 @@
 		86C5B904175CAF2200E7BC09 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard_iPad.storyboard; sourceTree = "<group>"; };
 		86C5B906175CAF2200E7BC09 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		86C5B907175CAF2200E7BC09 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		86C5B90E175CAF2200E7BC09 /* kvdbAppTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kvdbAppTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
-		86C5B90F175CAF2200E7BC09 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
+		86C5B90E175CAF2200E7BC09 /* kvdbAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = kvdbAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		86C5B917175CAF2200E7BC09 /* kvdbAppTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "kvdbAppTests-Info.plist"; sourceTree = "<group>"; };
 		86C5B919175CAF2200E7BC09 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		86C5B927175CAF3A00E7BC09 /* kvdb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kvdb.h; sourceTree = "<group>"; };
 		86C5B928175CAF3A00E7BC09 /* kvdb.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdb.m; sourceTree = "<group>"; };
 		86C5B929175CAF3A00E7BC09 /* KVDBFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KVDBFunctions.m; sourceTree = "<group>"; };
 		86C5B92A175CAF3A00E7BC09 /* KVDBFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KVDBFunctions.h; sourceTree = "<group>"; };
-		86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DatabaseTestCase.m; sourceTree = "<group>"; };
+		86C5B92F175CAF4600E7BC09 /* kvdbTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
 		86C5B931175CAF4600E7BC09 /* FilesTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilesTestCase.m; sourceTree = "<group>"; };
-		86C5B933175CAF4600E7BC09 /* kvdbTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = kvdbTests.m; sourceTree = "<group>"; };
-		86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SerializationTestCase.m; sourceTree = "<group>"; };
 		86C5B93B175CB0F500E7BC09 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		86F52FAF17DBB9A800A7B538 /* KVDB_Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KVDB_Private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -92,7 +86,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86C5B910175CAF2200E7BC09 /* SenTestingKit.framework in Frameworks */,
 				86C5B911175CAF2200E7BC09 /* UIKit.framework in Frameworks */,
 				86C5B912175CAF2200E7BC09 /* Foundation.framework in Frameworks */,
 			);
@@ -116,7 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				86C5B8E5175CAF2100E7BC09 /* kvdbApp.app */,
-				86C5B90E175CAF2200E7BC09 /* kvdbAppTests.octest */,
+				86C5B90E175CAF2200E7BC09 /* kvdbAppTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -128,7 +121,6 @@
 				86C5B8E8175CAF2100E7BC09 /* UIKit.framework */,
 				86C5B8EA175CAF2100E7BC09 /* Foundation.framework */,
 				86C5B8EC175CAF2100E7BC09 /* CoreGraphics.framework */,
-				86C5B90F175CAF2200E7BC09 /* SenTestingKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -195,10 +187,8 @@
 		86C5B92D175CAF4600E7BC09 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				86C5B92F175CAF4600E7BC09 /* DatabaseTestCase.m */,
+				86C5B92F175CAF4600E7BC09 /* kvdbTests.m */,
 				86C5B931175CAF4600E7BC09 /* FilesTestCase.m */,
-				86C5B933175CAF4600E7BC09 /* kvdbTests.m */,
-				86C5B935175CAF4600E7BC09 /* SerializationTestCase.m */,
 			);
 			name = Tests;
 			path = ../../Tests;
@@ -240,8 +230,8 @@
 			);
 			name = kvdbAppTests;
 			productName = kvdbAppTests;
-			productReference = 86C5B90E175CAF2200E7BC09 /* kvdbAppTests.octest */;
-			productType = "com.apple.product-type.bundle";
+			productReference = 86C5B90E175CAF2200E7BC09 /* kvdbAppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -251,6 +241,11 @@
 			attributes = {
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Stanislaw Pankevich";
+				TargetAttributes = {
+					86C5B90D175CAF2200E7BC09 = {
+						TestTargetID = 86C5B8E4175CAF2100E7BC09;
+					};
+				};
 			};
 			buildConfigurationList = 86C5B8E0175CAF2100E7BC09 /* Build configuration list for PBXProject "kvdbApp" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -327,10 +322,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86C5B936175CAF4600E7BC09 /* DatabaseTestCase.m in Sources */,
+				86C5B936175CAF4600E7BC09 /* kvdbTests.m in Sources */,
 				86C5B937175CAF4600E7BC09 /* FilesTestCase.m in Sources */,
-				86C5B938175CAF4600E7BC09 /* kvdbTests.m in Sources */,
-				86C5B939175CAF4600E7BC09 /* SerializationTestCase.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -465,34 +458,34 @@
 		86C5B924175CAF2200E7BC09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kvdbApp.app/kvdbApp";
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "kvdbApp/kvdbApp-Prefix.pch";
 				INFOPLIST_FILE = "kvdbAppTests/kvdbAppTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/kvdbApp.app/kvdbApp";
 			};
 			name = Debug;
 		};
 		86C5B925175CAF2200E7BC09 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/kvdbApp.app/kvdbApp";
+				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"\"$(SDKROOT)/Developer/Library/Frameworks\"",
 					"\"$(DEVELOPER_LIBRARY_DIR)/Frameworks\"",
+					"$(inherited)",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "kvdbApp/kvdbApp-Prefix.pch";
 				INFOPLIST_FILE = "kvdbAppTests/kvdbAppTests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUNDLE_LOADER)";
-				WRAPPER_EXTENSION = octest;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/kvdbApp.app/kvdbApp";
 			};
 			name = Release;
 		};
